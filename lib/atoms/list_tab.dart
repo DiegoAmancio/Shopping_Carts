@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../class/list_tab_item.dart';
 
@@ -13,11 +14,8 @@ class ListTab extends StatelessWidget {
       elevation: 5,
       child: ListTile(
         title: Text(item.name),
-        trailing: IconButton(
-          icon: const Icon(Icons.zoom_out_map_outlined),
-          color: Theme.of(context).colorScheme.error,
-          onPressed: () {},
-        ),
+        onTap: () {},
+        trailing: Text(DateFormat('d/MM/y').format(item.date)),
       ),
     );
   }

@@ -1,9 +1,47 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../class/list_tab_item.dart';
+import '../molecules/create_list_form.dart';
 import '../molecules/list.dart';
 
 class _HomePageState extends State<HomePage> {
+  final List<ListTabItem> _lists = [
+    ListTabItem(
+      id: '123',
+      name: 'Geladeira',
+      date: DateTime.now(),
+    ),
+    ListTabItem(
+      id: '123',
+      name: 'Frigobar',
+      date: DateTime.now(),
+    )
+  ];
+  _addItem(String name, DateTime selectedDate) {
+    final newLists = ListTabItem(
+      id: Random().nextDouble().toString(),
+      date: selectedDate,
+      name: name,
+    );
+
+    setState(() {
+      _lists.add(newLists);
+    });
+
+    Navigator.of(context).pop();
+  }
+
+  _openTransactionFormModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return CreateListForm(_addItem);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final availableHeight =
@@ -32,25 +70,14 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
                 height: availableHeight * 0.7,
                 child: ListItemTabs(
-                  items: [
-                    ListTabItem(
-                      id: '123',
-                      name: 'Geladeira',
-                      date: DateTime.now(),
-                    ),
-                    ListTabItem(
-                      id: '123',
-                      name: 'Frigobar',
-                      date: DateTime.now(),
-                    )
-                  ],
+                  items: _lists,
                 ))
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => {},
+        onPressed: () => _openTransactionFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       // This trailing comma makes auto-formatting nicer for build methods.
