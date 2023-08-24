@@ -6,7 +6,7 @@ import '../class/list_tab_item.dart';
 import '../molecules/create_list_form.dart';
 import '../molecules/list.dart';
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   final List<ListTabItem> _lists = [
     ListTabItem(
       id: '123',
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 10, // <-- SEE HERE
             ),
-            const Text('Listas de produtos',
+            const Text('Listas',
                 style: TextStyle(
                   fontSize: 18,
                 )),
@@ -85,9 +85,9 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }

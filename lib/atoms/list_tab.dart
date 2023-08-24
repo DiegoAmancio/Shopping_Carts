@@ -14,7 +14,13 @@ class ListTab extends StatelessWidget {
       elevation: 5,
       child: ListTile(
         title: Text(item.name),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            '/list',
+            arguments: {'item': item},
+          );
+        },
         trailing: Text(DateFormat('d/MM/y').format(item.date)),
       ),
     );
