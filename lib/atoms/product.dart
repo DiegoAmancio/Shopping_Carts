@@ -7,6 +7,13 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({super.key, required this.product});
 
+  formatMessage() {
+    final total = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$')
+        .format((product.unitPrice * product.quantity));
+
+    return 'Quantidade: ${product.quantity.toInt()}\nData de vencimento ${DateFormat('d/MM/y').format(product.expirationTime)}\nTotal:  $total';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -18,7 +25,7 @@ class ProductCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             )),
         subtitle: Text(
-          'Quantidade: ${product.quantity.toInt()}\nData de vencimento ${DateFormat('d/MM/y').format(product.expirationTime)}',
+          formatMessage(),
           style: const TextStyle(fontSize: 17),
         ),
         trailing: const Icon(Icons.more_vert),

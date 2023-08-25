@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:shopping_list/class/product.dart';
 
+import '../atoms/list_nutshell.dart';
 import '../atoms/product.dart';
 import '../class/list_tab_item.dart';
 import '../molecules/create_list_form.dart';
@@ -89,6 +90,7 @@ class _ListScreenState extends State<ListScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const ListNutshell(quantity: 4, total: 4),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
