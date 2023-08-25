@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_list/pages/home.dart';
-import 'package:shopping_list/pages/list.dart';
+import 'package:shopping_list/pages/cart.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
-        '/list': (context) => const ListScreen(),
+        '/list': (context) => const CartScreen(),
       },
     );
   }
