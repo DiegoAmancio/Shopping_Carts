@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const SizedBox(
               height: 10, // <-- SEE HERE

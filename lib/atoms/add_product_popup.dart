@@ -132,7 +132,6 @@ class _AddProductPopupState extends State<AddProductPopup> {
                 height: 70,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,

@@ -10,8 +10,10 @@ class ProductCard extends StatelessWidget {
   formatMessage() {
     final total = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$')
         .format((product.unitPrice * product.quantity));
+    final productQuantity = product.quantity.toInt();
+    final expirationTime = DateFormat('d/MM/y').format(product.expirationTime);
 
-    return 'Quantidade: ${product.quantity.toInt()}\nData de vencimento ${DateFormat('d/MM/y').format(product.expirationTime)}\nTotal:  $total';
+    return 'Quantidade: $productQuantity\nData de vencimento $expirationTime\nTotal:  $total';
   }
 
   @override
