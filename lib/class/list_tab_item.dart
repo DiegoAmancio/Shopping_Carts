@@ -1,5 +1,5 @@
 class ListTabItem {
-  final String id;
+  int id;
   final String name;
   final DateTime date;
 

@@ -30,7 +30,8 @@ class ProductCard extends StatelessWidget {
           formatMessage(),
           style: const TextStyle(fontSize: 17),
         ),
-        trailing: const Icon(Icons.more_vert),
+        trailing: const SizedBox(
+            height: double.infinity, child: Icon(Icons.more_vert)),
       ),
     );
   }

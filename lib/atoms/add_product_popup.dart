@@ -26,7 +26,6 @@ class _AddProductPopupState extends State<AddProductPopup> {
 
   final _quantityFocus = FocusNode();
   final _unitPriceFocus = FocusNode();
-  final _expirationTimeFocus = FocusNode();
 
   _submitForm() {
     final name = _nameController.text;
@@ -122,7 +121,7 @@ class _AddProductPopupState extends State<AddProductPopup> {
                     const TextInputType.numberWithOptions(decimal: true),
                 focusNode: _unitPriceFocus,
                 onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_expirationTimeFocus);
+                  _showDatePicker();
                 },
                 validator: (value) {
                   return validatorInputs(value);
@@ -142,7 +141,6 @@ class _AddProductPopupState extends State<AddProductPopup> {
                       ],
                     ),
                     TextButton(
-                      focusNode: _expirationTimeFocus,
                       onPressed: _showDatePicker,
                       child: const Text(
                         'Selecionar data',

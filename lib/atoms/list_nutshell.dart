@@ -15,7 +15,7 @@ class ListNutshell extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
-          height: 60,
+          height: 35,
           width: 100,
           child: ListTile(
             title: const Text(

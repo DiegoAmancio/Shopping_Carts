@@ -1,36 +1,45 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:shopping_list/db/database.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../class/list_tab_item.dart';
 import '../atoms/create_list_form.dart';
+import '../db/list.dart';
 import '../molecules/list.dart';
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<ListTabItem> _lists = [
-    ListTabItem(
-      id: '123',
-      name: 'Geladeira',
-      date: DateTime.now(),
-    ),
-    ListTabItem(
-      id: '123',
-      name: 'Frigobar',
-      date: DateTime.now(),
-    )
-  ];
-  _addItem(String name, DateTime selectedDate) {
-    final newLists = ListTabItem(
-      id: Random().nextDouble().toString(),
-      date: selectedDate,
-      name: name,
-    );
+  List<ListTabItem> _lists = [];
+  late Database database;
+  final listTableDB = ListTableDB();
+
+  Future<void> initializeDatabase() async {
+    final db = await AppDatabase().getDB();
+    final itens = await listTableDB.getAll(db);
 
     setState(() {
-      _lists.add(newLists);
+      database = db;
+      _lists = itens;
     });
+  }
 
-    Navigator.of(context).pop();
+  @override
+  void initState() {
+    super.initState();
+    initializeDatabase();
+  }
+
+  _addItem(String name, DateTime date) async {
+    var item = ListTabItem(
+      id: 1,
+      date: date,
+      name: name,
+    );
+    final itemId = await listTableDB.create(database, item);
+    item.id = itemId;
+    setState(() {
+      _lists.add(item);
+      Navigator.of(context).pop();
+    });
   }
 
   _openTransactionFormModal(BuildContext context) {
@@ -57,14 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: <Widget>[
             const SizedBox(
-              height: 10, // <-- SEE HERE
+              height: 10,
             ),
             const Text('Listas',
                 style: TextStyle(
                   fontSize: 18,
                 )),
             const SizedBox(
-              height: 10, // <-- SEE HERE
+              height: 10,
             ),
             SizedBox(
                 height: availableHeight * 0.7,
@@ -79,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () => _openTransactionFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
