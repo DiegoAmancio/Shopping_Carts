@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shopping_list/controller/cart.controller.dart';
 import 'package:shopping_list/db/database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,23 +10,21 @@ import '../db/list.dart';
 import '../molecules/list.dart';
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<ListTabItem> _lists = [];
+  late final CartController _controller;
   late Database database;
   final listTableDB = ListTableDB();
 
   Future<void> initializeDatabase() async {
     final db = await AppDatabase().getDB();
     final itens = await listTableDB.getAll(db);
-
-    setState(() {
-      database = db;
-      _lists = itens;
-    });
+    database = db;
+    _controller.initLists(itens);
   }
 
   @override
   void initState() {
     super.initState();
+    _controller = Get.put(CartController());
     initializeDatabase();
   }
 
@@ -36,8 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     final itemId = await listTableDB.create(database, item);
     item.id = itemId;
+
+    _controller.addItem(item);
+
     setState(() {
-      _lists.add(item);
       Navigator.of(context).pop();
     });
   }
@@ -62,27 +64,33 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 10,
-            ),
-            const Text('Listas',
-                style: TextStyle(
-                  fontSize: 18,
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-                height: availableHeight * 0.7,
-                child: ListItemTabs(
-                  items: _lists,
-                ))
-          ],
-        ),
-      ),
+      body: Obx(() {
+        return _controller.isLoading.value
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text('Listas',
+                        style: TextStyle(
+                          fontSize: 18,
+                        )),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                        height: availableHeight * 0.7,
+                        child: ListItemTabs(
+                          items: _controller.lists,
+                        ))
+                  ],
+                ),
+              );
+      }),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _openTransactionFormModal(context),
