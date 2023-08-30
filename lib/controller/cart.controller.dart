@@ -13,6 +13,11 @@ class CartController extends GetxController {
     _lists.add(item);
   }
 
+  updateItem(ListTabItem item) {
+    int index = _lists.indexWhere((element) => element.id == item.id);
+    _lists[index] = item;
+  }
+
   setLists(List<ListTabItem> newLists) {
     _lists.clear();
     _lists.addAll(newLists);

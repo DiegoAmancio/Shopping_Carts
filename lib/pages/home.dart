@@ -5,7 +5,7 @@ import 'package:shopping_list/db/database.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../class/list_tab_item.dart';
-import '../atoms/create_list_form.dart';
+import '../atoms/list_form_popup.dart';
 import '../db/list.dart';
 import '../molecules/list.dart';
 
@@ -28,12 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initializeDatabase();
   }
 
-  _addItem(String name, DateTime date) async {
-    var item = ListTabItem(
-      id: 1,
-      date: date,
-      name: name,
-    );
+  _addItem(ListTabItem item) async {
     final itemId = await listTableDB.create(database, item);
     item.id = itemId;
 
@@ -44,11 +39,42 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  _openTransactionFormModal(BuildContext context) {
+  _editItem(ListTabItem item) async {
+    final itemId = await listTableDB.update(database, item);
+    item.id = itemId;
+
+    _controller.updateItem(item);
+
+    setState(() {
+      Navigator.of(context).pop();
+    });
+  }
+
+  _openCreateFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return CreateListForm(_addItem);
+        return ListFormPopup(
+          _addItem,
+          initItem: ListTabItem(id: 0, name: '', date: DateTime.now()),
+        );
+      },
+    );
+  }
+
+  _openEditFormModal(
+    BuildContext context,
+    int id,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return ListFormPopup(
+          _editItem,
+          initItem: _controller.lists
+              .where((element) => element.id == id)
+              .toList()[0],
+        );
       },
     );
   }
@@ -86,6 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: availableHeight * 0.7,
                         child: ListItemTabs(
                           items: _controller.lists,
+                          onEdit: (int id) {
+                            _openEditFormModal(context, id);
+                          },
+                          onRemove: (int id) {},
                         ))
                   ],
                 ),
@@ -93,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () => _openTransactionFormModal(context),
+        onPressed: () => _openCreateFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );

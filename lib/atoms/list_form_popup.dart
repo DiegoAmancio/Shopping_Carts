@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateListForm extends StatefulWidget {
-  final void Function(String, DateTime) onSubmit;
-  const CreateListForm(this.onSubmit, {super.key});
+import '../class/list_tab_item.dart';
+
+class ListFormPopup extends StatefulWidget {
+  final ListTabItem initItem;
+  final void Function(ListTabItem item) onSubmit;
+  const ListFormPopup(this.onSubmit, {super.key, required this.initItem});
 
   @override
-  State<CreateListForm> createState() => _CreateListFormState();
+  State<ListFormPopup> createState() => _ListFormPopupState();
 }
 
-class _CreateListFormState extends State<CreateListForm> {
+class _ListFormPopupState extends State<ListFormPopup> {
   final _titleController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.text = widget.initItem.name;
+    _selectedDate = widget.initItem.date;
+  }
+
   _submitForm() {
     final name = _titleController.text;
-    widget.onSubmit(name, _selectedDate);
+    widget.onSubmit(
+        ListTabItem(id: widget.initItem.id, name: name, date: _selectedDate));
   }
 
   _showDatePicker() {
