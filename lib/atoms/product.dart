@@ -5,15 +5,24 @@ import 'package:shopping_list/class/product.dart';
 class ProductCard extends StatelessWidget {
   final Product product;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({Key? key, required this.product}) : super(key: key);
 
-  formatMessage() {
-    final total = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$')
-        .format((product.unitPrice * product.quantity));
+  String formatMessage() {
+    final total = _formatCurrency(product.unitPrice * product.quantity);
     final productQuantity = product.quantity.toInt();
-    final expirationTime = DateFormat('d/MM/y').format(product.expirationTime);
+    final expirationTime = _formatDate(product.expirationTime);
 
-    return 'Quantidade: $productQuantity\nData de vencimento $expirationTime\nTotal:  $total';
+    return 'Quantidade: $productQuantity\n'
+        'Data de vencimento: $expirationTime\n'
+        'Total: $total';
+  }
+
+  String _formatCurrency(double amount) {
+    return NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(amount);
+  }
+
+  String _formatDate(DateTime dateTime) {
+    return DateFormat('d/MM/y').format(dateTime);
   }
 
   @override
@@ -21,17 +30,21 @@ class ProductCard extends StatelessWidget {
     return Card(
       elevation: 5,
       child: ListTile(
-        title: Text(product.name.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            )),
+        title: Text(
+          product.name.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         subtitle: Text(
           formatMessage(),
           style: const TextStyle(fontSize: 17),
         ),
         trailing: const SizedBox(
-            height: double.infinity, child: Icon(Icons.more_vert)),
+          height: double.infinity,
+          child: Icon(Icons.more_vert),
+        ),
       ),
     );
   }

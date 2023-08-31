@@ -1,40 +1,49 @@
 import 'package:get/get.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../class/list_tab_item.dart';
+import '../db/database.dart';
+import '../db/list.dart';
 
 class CartController extends GetxController {
-  final RxList<ListTabItem> _lists = <ListTabItem>[].obs;
-  final RxBool _isLoading = true.obs;
+  final RxList<ListTabItem> lists = <ListTabItem>[].obs;
+  final ListTableDB listTableDB = ListTableDB();
+  late Database database;
 
-  List<ListTabItem> get lists => _lists;
-  RxBool get isLoading => _isLoading;
-
-  addItem(ListTabItem item) {
-    _lists.add(item);
+  Future<void> initializeDatabase() async {
+    final db = await AppDatabase().getDB();
+    database = db;
   }
 
-  updateItem(ListTabItem item) {
-    int index = _lists.indexWhere((element) => element.id == item.id);
-    _lists[index] = item;
+  Future<void> addItem(ListTabItem item) async {
+    final itemId = await listTableDB.create(database, item);
+    item.id = itemId;
+    lists.add(item);
   }
 
-  deleteItem(int id) {
-    int index = _lists.indexWhere((element) => element.id == id);
-    _lists.removeAt(index);
+  Future<void> updateItem(ListTabItem item) async {
+    final itemId = await listTableDB.update(database, item);
+    item.id = itemId;
+    int index = lists.indexWhere((element) => element.id == item.id);
+    lists[index] = item;
+  }
 
-    _lists.refresh();
-
-    print(_lists);
+  deleteItem(int id) async {
+    await listTableDB.delete(database, id);
+    int index = lists.indexWhere((element) => element.id == id);
+    lists.removeAt(index);
   }
 
   setLists(List<ListTabItem> newLists) {
-    _lists.clear();
-    _lists.addAll(newLists);
+    lists.clear();
+    lists.addAll(newLists);
   }
 
-  initLists(List<ListTabItem> newLists) {
-    _isLoading.value = false;
+  initLists() async {
+    await initializeDatabase();
 
-    setLists(newLists);
+    final itens = await listTableDB.getAll(database);
+    setLists(itens);
+    return itens;
   }
 }

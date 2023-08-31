@@ -1,57 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_list/controller/cart.controller.dart';
-import 'package:shopping_list/db/database.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../class/list_tab_item.dart';
 import '../atoms/list_form_popup.dart';
 import '../db/list.dart';
-import '../molecules/list.dart';
+import '../molecules/list_tab.dart';
 
-class _HomeScreenState extends State<HomeScreen> {
-  late final CartController _controller;
-  late Database database;
+class HomeScreen extends StatelessWidget {
+  final _controller = Get.find<CartController>();
   final listTableDB = ListTableDB();
 
-  Future<void> initializeDatabase() async {
-    final db = await AppDatabase().getDB();
-    final itens = await listTableDB.getAll(db);
-    database = db;
-    _controller.initLists(itens);
+  HomeScreen({super.key});
+
+  _addItem(BuildContext context, ListTabItem item) async {
+    _controller.addItem(item).then((value) => Navigator.of(context).pop());
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = Get.put(CartController());
-    initializeDatabase();
-  }
-
-  _addItem(ListTabItem item) async {
-    final itemId = await listTableDB.create(database, item);
-    item.id = itemId;
-
-    _controller.addItem(item);
-
-    setState(() {
-      Navigator.of(context).pop();
-    });
-  }
-
-  _editItem(ListTabItem item) async {
-    final itemId = await listTableDB.update(database, item);
-    item.id = itemId;
-
-    _controller.updateItem(item);
-
-    setState(() {
-      Navigator.of(context).pop();
-    });
+  Future<void> _editItem(BuildContext context, ListTabItem item) async {
+    _controller.updateItem(item).then((value) => Navigator.of(context).pop());
   }
 
   _removeItem(int id) async {
-    await listTableDB.delete(database, id);
     _controller.deleteItem(id);
   }
 
@@ -60,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (_) {
         return ListFormPopup(
-          _addItem,
+          (ListTabItem item) => _addItem(context, item),
           initItem: ListTabItem(id: 0, name: '', date: DateTime.now()),
         );
       },
@@ -75,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (_) {
         return ListFormPopup(
-          _editItem,
+          (ListTabItem item) => _editItem(context, item),
           initItem: _controller.lists
               .where((element) => element.id == id)
               .toList()[0],
@@ -95,39 +65,48 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Obx(() {
-        return _controller.isLoading.value
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text('Listas',
-                        style: TextStyle(
-                          fontSize: 18,
-                        )),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                        height: availableHeight * 0.7,
-                        child: ListItemTabs(
-                          items: _controller.lists,
-                          onEdit: (int id) {
-                            _openEditFormModal(context, id);
-                          },
-                          onRemove: (int id) {
-                            _removeItem(id);
-                          },
-                        ))
-                  ],
-                ),
-              );
-      }),
+      body: FutureBuilder<void>(
+        future: _controller.initLists(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text('Error loading data'),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text('Listas', style: TextStyle(fontSize: 18)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                      height: availableHeight * 0.7,
+                      child: Obx(() => ListView.builder(
+                            itemCount: _controller.lists.length,
+                            itemBuilder: (ctx, index) {
+                              final item = _controller.lists[index];
+                              return ListTab(
+                                item: item,
+                                onEdit: (int id) =>
+                                    _openEditFormModal(context, id),
+                                onRemove: _removeItem,
+                              );
+                            },
+                          ))),
+                ],
+              ),
+            );
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _openCreateFormModal(context),
@@ -135,11 +114,4 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
-}
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
 }
