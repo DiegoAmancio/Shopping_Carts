@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../class/list_tab_item.dart';
 
 class CartController extends GetxController {
-  final List<ListTabItem> _lists = <ListTabItem>[].obs;
+  final RxList<ListTabItem> _lists = <ListTabItem>[].obs;
   final RxBool _isLoading = true.obs;
 
   List<ListTabItem> get lists => _lists;
@@ -16,6 +16,15 @@ class CartController extends GetxController {
   updateItem(ListTabItem item) {
     int index = _lists.indexWhere((element) => element.id == item.id);
     _lists[index] = item;
+  }
+
+  deleteItem(int id) {
+    int index = _lists.indexWhere((element) => element.id == id);
+    _lists.removeAt(index);
+
+    _lists.refresh();
+
+    print(_lists);
   }
 
   setLists(List<ListTabItem> newLists) {

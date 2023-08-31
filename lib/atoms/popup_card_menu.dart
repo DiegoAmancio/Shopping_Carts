@@ -11,7 +11,6 @@ class PopupCardMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-        // add icon, by default "3 dot" icon
         icon: const Icon(Icons.more_vert),
         itemBuilder: (context) {
           return [

@@ -50,6 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  _removeItem(int id) async {
+    await listTableDB.delete(database, id);
+    _controller.deleteItem(id);
+  }
+
   _openCreateFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -115,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           onEdit: (int id) {
                             _openEditFormModal(context, id);
                           },
-                          onRemove: (int id) {},
+                          onRemove: (int id) {
+                            _removeItem(id);
+                          },
                         ))
                   ],
                 ),
