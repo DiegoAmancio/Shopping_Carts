@@ -42,7 +42,7 @@ class CartController extends GetxController {
   initLists() async {
     await initializeDatabase();
 
-    final itens = await listTableDB.getAll(database);
+    final itens = await listTableDB.getAll(database, null);
     setLists(itens);
     return itens;
   }

@@ -3,9 +3,8 @@ import 'package:intl/intl.dart';
 
 class ListNutshell extends StatelessWidget {
   final double total;
-  final double quantity;
 
-  const ListNutshell({super.key, required this.total, required this.quantity});
+  const ListNutshell({super.key, required this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class ListNutshell extends StatelessWidget {
       children: [
         SizedBox(
           height: 35,
-          width: 100,
+          width: 400,
           child: ListTile(
             title: const Text(
               'Total',

@@ -41,7 +41,7 @@ class ListTableDB implements CrudInterface {
   }
 
   @override
-  getAll(Database database) async {
+  getAll(Database database, int? _) async {
     final List<Map<String, dynamic>> maps = await database.query('ListTable');
 
     return List.generate(maps.length, (index) {

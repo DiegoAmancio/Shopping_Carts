@@ -5,18 +5,18 @@ import 'package:sqflite/sqflite.dart';
 
 import '../class/product.dart';
 
-class ProductDB implements CrudInterface {
+class ProductTableDB implements CrudInterface {
   @override
   create(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawInsert(
-        'INSERT INTO item(name, expirationTime, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?, ?)',
+        'INSERT INTO Product(name, expirationTime, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?, ?)',
         [
           item.name,
           item.expirationTime.toIso8601String(),
           item.quantity,
           item.unitPrice,
-          item.listId
+          item.trackListId
         ],
       );
     });
@@ -25,9 +25,9 @@ class ProductDB implements CrudInterface {
   }
 
   @override
-  delete(Database database, item) {
+  delete(Database database, id) {
     return database.transaction((txn) async {
-      await txn.rawDelete('DELETE FROM item WHERE id = ?', [item.id]);
+      await txn.rawDelete('DELETE FROM Product WHERE id = ?', [id]);
     });
   }
 
@@ -46,6 +46,7 @@ class ProductDB implements CrudInterface {
         expirationTime: DateTime.parse(maps[index]['expirationTime']),
         quantity: maps[index]['quantity'],
         unitPrice: maps[index]['unitPrice'],
+        trackListId: maps[index]['trackListId'],
       );
     });
   }
@@ -54,12 +55,13 @@ class ProductDB implements CrudInterface {
   update(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawUpdate(
-        'UPDATE item SET name = ?, expirationTime = ?, quantity = ?, unitPrice = ? WHERE id = ?',
+        'UPDATE Product SET name = ?, expirationTime = ?, quantity = ?, unitPrice = ? WHERE id = ?',
         [
           item.name,
           item.expirationTime.toIso8601String(),
           item.quantity,
           item.unitPrice,
+          item.id,
         ],
       );
     });
@@ -68,8 +70,22 @@ class ProductDB implements CrudInterface {
   }
 
   @override
-  getAll(Database database) {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  getAll(Database database, int? id) async {
+    final List<Map<String, dynamic>> maps = await database.query(
+      'Product',
+      where: 'trackListId = ?',
+      whereArgs: [id],
+    );
+
+    return List.generate(maps.length, (index) {
+      return Product(
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        expirationTime: DateTime.parse(maps[index]['expirationTime']),
+        quantity: maps[index]['quantity'],
+        unitPrice: maps[index]['unitPrice'],
+        trackListId: maps[index]['trackListId'],
+      );
+    });
   }
 }

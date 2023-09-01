@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -7,15 +5,16 @@ import 'package:intl/intl.dart';
 import '../class/currency.dart';
 import '../class/product.dart';
 
-class AddProductPopup extends StatefulWidget {
+class ProductPopup extends StatefulWidget {
+  final Product initProduct;
   final void Function(Product) onSubmit;
-  const AddProductPopup(this.onSubmit, {super.key});
+  const ProductPopup(this.onSubmit, {super.key, required this.initProduct});
 
   @override
-  State<AddProductPopup> createState() => _AddProductPopupState();
+  State<ProductPopup> createState() => _ProductPopupState();
 }
 
-class _AddProductPopupState extends State<AddProductPopup> {
+class _ProductPopupState extends State<ProductPopup> {
   DateTime _selectedExpirationTime = DateTime.now();
 
   final _nameController = TextEditingController();
@@ -27,6 +26,15 @@ class _AddProductPopupState extends State<AddProductPopup> {
   final _quantityFocus = FocusNode();
   final _unitPriceFocus = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.initProduct.name;
+    _quantityController.text = widget.initProduct.quantity.toInt().toString();
+    _unitPriceController.text = widget.initProduct.unitPrice.toString();
+    _selectedExpirationTime = widget.initProduct.expirationTime;
+  }
+
   _submitForm() {
     final name = _nameController.text;
     final double quantity = double.parse(_quantityController.text);
@@ -34,11 +42,12 @@ class _AddProductPopupState extends State<AddProductPopup> {
         CurrencyPtBrInputFormatter.maskRealToDouble(_unitPriceController.text);
 
     widget.onSubmit(Product(
-        id: Random().nextDouble().toString(),
+        id: widget.initProduct.id,
         name: name,
         expirationTime: _selectedExpirationTime,
         quantity: quantity,
-        unitPrice: unitPrice));
+        unitPrice: unitPrice,
+        trackListId: widget.initProduct.trackListId));
   }
 
   _showDatePicker() {
@@ -83,7 +92,7 @@ class _AddProductPopupState extends State<AddProductPopup> {
             children: [
               TextFormField(
                 decoration:
-                    const InputDecoration(label: Text('Nome do carrinho')),
+                    const InputDecoration(label: Text('Nome do produto')),
                 textInputAction: TextInputAction.next,
                 controller: _nameController,
                 validator: (value) {
@@ -98,8 +107,7 @@ class _AddProductPopupState extends State<AddProductPopup> {
                 decoration: const InputDecoration(label: Text('Quantidade')),
                 textInputAction: TextInputAction.next,
                 controller: _quantityController,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(),
                 focusNode: _quantityFocus,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_unitPriceFocus);
@@ -107,6 +115,9 @@ class _AddProductPopupState extends State<AddProductPopup> {
                 validator: (value) {
                   return validatorInputs(value);
                 },
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                ],
               ),
               TextFormField(
                 decoration:
@@ -136,7 +147,7 @@ class _AddProductPopupState extends State<AddProductPopup> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Data de Validade Selecionada'),
-                        Text(DateFormat('d/MM/y')
+                        Text(DateFormat('dd/MM/y')
                             .format(_selectedExpirationTime)),
                       ],
                     ),

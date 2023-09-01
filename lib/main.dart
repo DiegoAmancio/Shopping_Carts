@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:shopping_list/pages/home.dart';
 import 'package:shopping_list/pages/cart.dart';
-import 'package:shopping_list/store_binding.dart';
+
+import 'controller/cart.controller.dart';
+import 'controller/product.controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +21,10 @@ class MyApp extends StatelessWidget {
         fontFamily: 'QuickSand');
 
     return GetMaterialApp(
-      initialBinding: StoreBinding(),
+      initialBinding: BindingsBuilder(() {
+        Get.lazyPut(() => CartController());
+        Get.lazyPut(() => ProductsController());
+      }),
       title: 'Flutter Demo',
       theme: tema.copyWith(
         colorScheme: tema.colorScheme.copyWith(
@@ -46,7 +51,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(),
-        '/list': (context) => const CartScreen(),
+        '/list': (context) => CartScreen(),
       },
     );
   }

@@ -4,12 +4,10 @@ import 'package:shopping_list/controller/cart.controller.dart';
 
 import '../class/list_tab_item.dart';
 import '../atoms/list_form_popup.dart';
-import '../db/list.dart';
 import '../molecules/list_tab.dart';
 
 class HomeScreen extends StatelessWidget {
   final _controller = Get.find<CartController>();
-  final listTableDB = ListTableDB();
 
   HomeScreen({super.key});
 

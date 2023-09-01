@@ -1,59 +1,71 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shopping_list/class/product.dart';
 
-import '../atoms/add_product_popup.dart';
 import '../atoms/list_nutshell.dart';
 import '../atoms/product.dart';
+import '../atoms/product_popup.dart';
 import '../class/list_tab_item.dart';
+import '../controller/product.controller.dart';
 
-class _CartScreenState extends State<CartScreen> {
-  Iterable<Product> _productsFiltered = [];
-  final List<Product> _products = [
-    Product(
-      id: Random().nextDouble().toString(),
-      name: 'nestle',
-      expirationTime: DateTime.now(),
-      quantity: 1,
-      unitPrice: 5,
-    )
-  ];
+class CartScreen extends StatelessWidget {
+  final _controller = Get.find<ProductsController>();
   final _searchController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _productsFiltered = _products;
+  CartScreen({super.key});
+
+  _addItem(BuildContext context, Product item) async {
+    _controller.addItem(item).then((value) => Navigator.of(context).pop());
   }
 
-  _addItem(Product product) {
-    setState(() {
-      _products.add(product);
-    });
-
-    Navigator.of(context).pop();
+  Future<void> _editItem(BuildContext context, Product item) async {
+    _controller.updateItem(item).then((value) => Navigator.of(context).pop());
   }
 
-  _openTransactionFormModal(BuildContext context) {
+  _removeItem(int id) async {
+    _controller.deleteItem(id);
+  }
+
+  _openCreateFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
-        return AddProductPopup(_addItem);
+        return ProductPopup(
+          (Product product) => _addItem(context, product),
+          initProduct: Product(
+              id: 0,
+              name: 'nestle',
+              expirationTime: DateTime.now(),
+              quantity: 1,
+              unitPrice: 1,
+              trackListId: _controller.cartId.value),
+        );
       },
     );
   }
 
-  listProducts() {
-    final searchText = _searchController.value.text;
-    final productsToShow = searchText.isEmpty
-        ? _products
-        : _products.where((product) =>
-            product.name.toLowerCase().contains(searchText.toLowerCase()));
+  _openEditFormModal(BuildContext context, Product product) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return ProductPopup(
+          (Product item) => _editItem(context, item),
+          initProduct: product,
+        );
+      },
+    );
+  }
 
-    setState(() {
-      _productsFiltered = productsToShow;
-    });
+  Iterable<Product> _filterProducts(String searchText) => searchText.isEmpty
+      ? _controller.products
+      : _controller.products.where((product) =>
+          product.name.toLowerCase().contains(searchText.toLowerCase()));
+
+  _listProducts() {
+    final searchText = _searchController.value.text;
+    final productsToShow = _filterProducts(searchText).toList();
+
+    _controller.setproductsToShow(productsToShow);
   }
 
   @override
@@ -72,43 +84,62 @@ class _CartScreenState extends State<CartScreen> {
           ),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            children: [
-              const ListNutshell(quantity: 4, total: 4),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                    hintText: 'Pesquise',
+        body: FutureBuilder<void>(
+            future: _controller.initproducts(_controller.cartId.value),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error loading data'),
+                );
+              } else {
+                return SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Column(
+                    children: [
+                      Obx(() => ListNutshell(total: _controller.total.value)),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Pesquise',
+                          ),
+                          controller: _searchController,
+                          onChanged: (_) {
+                            _listProducts();
+                          },
+                        ),
+                      ),
+                      Obx(
+                        () => ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _controller.productsToShow.length,
+                            itemBuilder: (ctx, index) {
+                              final product = _controller.productsToShow[index];
+
+                              return ProductCard(
+                                product: product,
+                                onEdit: (Product item) =>
+                                    _openEditFormModal(context, item),
+                                onRemove: _removeItem,
+                              );
+                            }),
+                      )
+                    ],
                   ),
-                  controller: _searchController,
-                  onChanged: (_) {
-                    listProducts();
-                  },
-                ),
-              ),
-              ..._productsFiltered
-                  .map((Product product) => ProductCard(product: product))
-                  .toList()
-                  .reversed
-            ],
-          ),
-        ),
+                );
+              }
+            }),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
-          onPressed: () => _openTransactionFormModal(context),
+          onPressed: () => _openCreateFormModal(context),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       ),
     );
   }
-}
-
-class CartScreen extends StatefulWidget {
-  const CartScreen({super.key});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
 }

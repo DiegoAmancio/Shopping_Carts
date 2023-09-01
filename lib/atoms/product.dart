@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shopping_list/atoms/popup_card_menu.dart';
 import 'package:shopping_list/class/product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+  final void Function(Product product) onEdit;
+  final void Function(int id) onRemove;
 
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  const ProductCard(
+      {Key? key,
+      required this.product,
+      required this.onEdit,
+      required this.onRemove})
+      : super(key: key);
 
   String formatMessage() {
     final total = _formatCurrency(product.unitPrice * product.quantity);
@@ -22,7 +30,7 @@ class ProductCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime dateTime) {
-    return DateFormat('d/MM/y').format(dateTime);
+    return DateFormat('dd/MM/y').format(dateTime);
   }
 
   @override
@@ -41,9 +49,10 @@ class ProductCard extends StatelessWidget {
           formatMessage(),
           style: const TextStyle(fontSize: 17),
         ),
-        trailing: const SizedBox(
-          height: double.infinity,
-          child: Icon(Icons.more_vert),
+        trailing: PopupCardMenu(
+          product.id,
+          onEdit: (_) => onEdit(product),
+          onRemove: onRemove,
         ),
       ),
     );
