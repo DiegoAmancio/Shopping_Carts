@@ -2,7 +2,7 @@ class Product {
   int id;
   final String name;
   final DateTime expirationTime;
-  final double quantity;
+  final int quantity;
   final double unitPrice;
   final int trackListId;
 

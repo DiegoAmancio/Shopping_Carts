@@ -19,7 +19,8 @@ class ListTableDB implements CrudInterface {
   @override
   delete(Database database, id) async {
     return database.transaction((txn) async {
-      return txn.rawDelete('DELETE FROM ListTable WHERE id = ?', [id]);
+      await txn.rawDelete('DELETE FROM ListTable WHERE id = ?', [id]);
+      await txn.rawDelete('DELETE FROM Product WHERE trackListId = ?', [id]);
     });
   }
 

@@ -8,7 +8,9 @@ import '../class/product.dart';
 class ProductPopup extends StatefulWidget {
   final Product initProduct;
   final void Function(Product) onSubmit;
-  const ProductPopup(this.onSubmit, {super.key, required this.initProduct});
+  const ProductPopup(
+      {Key? key, required this.onSubmit, required this.initProduct})
+      : super(key: key);
 
   @override
   State<ProductPopup> createState() => _ProductPopupState();
@@ -31,32 +33,34 @@ class _ProductPopupState extends State<ProductPopup> {
     super.initState();
     _nameController.text = widget.initProduct.name;
     _quantityController.text = widget.initProduct.quantity.toInt().toString();
-    _unitPriceController.text = widget.initProduct.unitPrice.toString();
+    _unitPriceController.text =
+        CurrencyPtBrInputFormatter.numberToReal(widget.initProduct.unitPrice);
     _selectedExpirationTime = widget.initProduct.expirationTime;
   }
 
   _submitForm() {
     final name = _nameController.text;
-    final double quantity = double.parse(_quantityController.text);
+    final int quantity = int.parse(_quantityController.text);
     final double unitPrice =
         CurrencyPtBrInputFormatter.maskRealToDouble(_unitPriceController.text);
 
     widget.onSubmit(Product(
-        id: widget.initProduct.id,
-        name: name,
-        expirationTime: _selectedExpirationTime,
-        quantity: quantity,
-        unitPrice: unitPrice,
-        trackListId: widget.initProduct.trackListId));
+      id: widget.initProduct.id,
+      name: name,
+      expirationTime: _selectedExpirationTime,
+      quantity: quantity,
+      unitPrice: unitPrice,
+      trackListId: widget.initProduct.trackListId,
+    ));
   }
 
   _showDatePicker() {
     showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2019),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2019),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
       if (pickedDate != null) {
         setState(() {
           _selectedExpirationTime = pickedDate;
@@ -65,7 +69,7 @@ class _ProductPopupState extends State<ProductPopup> {
     });
   }
 
-  validatorInputs(value) {
+  String? validatorInputs(String? value) {
     if (value == null || value.isEmpty) {
       return 'Campo vazio';
     }
@@ -91,8 +95,7 @@ class _ProductPopupState extends State<ProductPopup> {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: [
               TextFormField(
-                decoration:
-                    const InputDecoration(label: Text('Nome do produto')),
+                decoration: const InputDecoration(labelText: 'Nome do produto'),
                 textInputAction: TextInputAction.next,
                 controller: _nameController,
                 validator: (value) {
@@ -104,10 +107,13 @@ class _ProductPopupState extends State<ProductPopup> {
                 autofocus: true,
               ),
               TextFormField(
-                decoration: const InputDecoration(label: Text('Quantidade')),
+                decoration: const InputDecoration(labelText: 'Quantidade'),
                 textInputAction: TextInputAction.next,
                 controller: _quantityController,
-                keyboardType: const TextInputType.numberWithOptions(),
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
                 focusNode: _quantityFocus,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_unitPriceFocus);
@@ -115,13 +121,10 @@ class _ProductPopupState extends State<ProductPopup> {
                 validator: (value) {
                   return validatorInputs(value);
                 },
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
               ),
               TextFormField(
                 decoration:
-                    const InputDecoration(label: Text('Preço por unidade')),
+                    const InputDecoration(labelText: 'Preço por unidade'),
                 textInputAction: TextInputAction.next,
                 controller: _unitPriceController,
                 inputFormatters: [

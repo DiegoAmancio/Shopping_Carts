@@ -2,6 +2,11 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class CurrencyPtBrInputFormatter extends TextInputFormatter {
+  static numberToReal(double number) {
+    final formatter = NumberFormat("#,##0.00", "pt_BR");
+    return "R\$ ${formatter.format(number)}";
+  }
+
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -18,7 +23,7 @@ class CurrencyPtBrInputFormatter extends TextInputFormatter {
         selection: TextSelection.collapsed(offset: newText.length));
   }
 
-  static maskRealToDouble(String value) {
+  static double maskRealToDouble(String value) {
     String cleanValue = value.replaceAll('R\$', '').replaceAll('.', '');
 
     cleanValue = cleanValue.replaceAll(',', '.');

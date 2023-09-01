@@ -31,14 +31,14 @@ class CartScreen extends StatelessWidget {
       context: context,
       builder: (_) {
         return ProductPopup(
-          (Product product) => _addItem(context, product),
           initProduct: Product(
               id: 0,
-              name: 'nestle',
+              name: '',
               expirationTime: DateTime.now(),
               quantity: 1,
               unitPrice: 1,
               trackListId: _controller.cartId.value),
+          onSubmit: (Product product) => _addItem(context, product),
         );
       },
     );
@@ -49,8 +49,8 @@ class CartScreen extends StatelessWidget {
       context: context,
       builder: (_) {
         return ProductPopup(
-          (Product item) => _editItem(context, item),
           initProduct: product,
+          onSubmit: (Product item) => _editItem(context, item),
         );
       },
     );
@@ -71,7 +71,6 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
     final propsItem = arguments['item'] as ListTabItem;
 
     return GestureDetector(
@@ -101,7 +100,8 @@ class CartScreen extends StatelessWidget {
                       ScrollViewKeyboardDismissBehavior.onDrag,
                   child: Column(
                     children: [
-                      Obx(() => ListNutshell(total: _controller.total.value)),
+                      Obx(() =>
+                          ListNutshell(total: _controller.calculateTotal())),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextField(

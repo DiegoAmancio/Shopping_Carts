@@ -8,7 +8,6 @@ import '../db/product.dart';
 
 class ProductsController extends GetxController {
   final RxInt cartId = 0.obs;
-  final RxDouble total = (0.0).obs;
   final RxList<Product> products = <Product>[].obs;
   final RxList<Product> productsToShow = <Product>[].obs;
 
@@ -21,7 +20,7 @@ class ProductsController extends GetxController {
   }
 
   calculateTotal() {
-    total.value = products.isNotEmpty
+    return products.isNotEmpty
         ? products
             .map((product) => product.quantity * product.unitPrice)
             .reduce((sum, value) => sum + value)
@@ -33,34 +32,30 @@ class ProductsController extends GetxController {
     product.id = itemId;
     products.add(product);
     productsToShow.add(product);
-    calculateTotal();
   }
 
   Future<void> updateItem(Product product) async {
     await productTableDB.update(database, product);
-    int index =
-        productsToShow.indexWhere((element) => element.id == product.id);
-    productsToShow[index] = product;
+    int index = products.indexWhere((element) => element.id == product.id);
+    products[index] = product;
 
     int indexToShow =
-        products.indexWhere((element) => element.id == product.id);
-    products.removeAt(indexToShow);
-    calculateTotal();
+        productsToShow.indexWhere((element) => element.id == product.id);
+    productsToShow[indexToShow] = product;
+    update();
   }
 
   deleteItem(int id) async {
     await productTableDB.delete(database, id);
-    int index = productsToShow.indexWhere((element) => element.id == id);
-    productsToShow.removeAt(index);
-    int indexToShow = products.indexWhere((element) => element.id == id);
-    products.removeAt(indexToShow);
-    calculateTotal();
+    int indexToShow = productsToShow.indexWhere((element) => element.id == id);
+    productsToShow.removeAt(indexToShow);
+    int index = products.indexWhere((element) => element.id == id);
+    products.removeAt(index);
   }
 
   setproducts(List<Product> newproducts) {
     products.clear();
     products.addAll(newproducts);
-    calculateTotal();
   }
 
   setproductsToShow(List<Product> newproducts) {
