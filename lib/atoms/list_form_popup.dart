@@ -70,7 +70,7 @@ class _ListFormPopupState extends State<ListFormPopup> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Data Selecionada'),
-                        Text(DateFormat('d/M/y').format(_selectedDate)),
+                        Text(DateFormat('dd/MM/y').format(_selectedDate)),
                       ],
                     ),
                     TextButton(

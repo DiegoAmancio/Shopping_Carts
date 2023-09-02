@@ -27,7 +27,7 @@ class ListTab extends StatelessWidget {
             arguments: {'item': item},
           );
         },
-        subtitle: Text(DateFormat('d/MM/y').format(item.date)),
+        subtitle: Text(DateFormat('dd/MM/y').format(item.date)),
         trailing: PopupCardMenu(
           item.id,
           onEdit: onEdit,
