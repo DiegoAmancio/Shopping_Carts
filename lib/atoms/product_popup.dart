@@ -59,7 +59,7 @@ class _ProductPopupState extends State<ProductPopup> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2019),
-      lastDate: DateTime.now(),
+      lastDate: DateTime(9999),
     ).then((pickedDate) {
       if (pickedDate != null) {
         setState(() {
