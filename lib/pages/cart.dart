@@ -80,22 +80,20 @@ class CartScreen extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: FutureBuilder<void>(
-          future: _controller.initproducts(_controller.cartId.value),
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Error loading data'),
-              );
-            } else {
-              return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                child: Column(
+      body: SingleChildScrollView(
+        child: FutureBuilder<void>(
+            future: _controller.initproducts(_controller.cartId.value),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Error loading data'),
+                );
+              } else {
+                return Column(
                   children: [
                     Obx(() =>
                         ListNutshell(total: _controller.calculateTotal())),
@@ -113,6 +111,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     Obx(
                       () => ListView.builder(
+                          primary: false,
                           shrinkWrap: true,
                           itemCount: _controller.productsToShow.length,
                           itemBuilder: (ctx, index) {
@@ -127,10 +126,10 @@ class CartScreen extends StatelessWidget {
                           }),
                     )
                   ],
-                ),
-              );
-            }
-          }),
+                );
+              }
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => _openCreateFormModal(context),
