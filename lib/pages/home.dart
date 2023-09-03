@@ -63,20 +63,20 @@ class HomeScreen extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: FutureBuilder<void>(
-        future: _controller.initLists(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text('Error loading data'),
-            );
-          } else {
-            return SingleChildScrollView(
-              child: Column(
+      body: SingleChildScrollView(
+        child: FutureBuilder<void>(
+          future: _controller.initLists(),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error loading data'),
+              );
+            } else {
+              return Column(
                 children: <Widget>[
                   const SizedBox(
                     height: 10,
@@ -100,10 +100,10 @@ class HomeScreen extends StatelessWidget {
                             },
                           ))),
                 ],
-              ),
-            );
-          }
-        },
+              );
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),

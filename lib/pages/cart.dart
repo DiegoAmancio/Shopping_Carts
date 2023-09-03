@@ -73,73 +73,70 @@ class CartScreen extends StatelessWidget {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     final propsItem = arguments['item'] as ListTabItem;
 
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          title: Text(
-            propsItem.name,
-          ),
-          backgroundColor: Theme.of(context).primaryColor,
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: Text(
+          propsItem.name,
         ),
-        body: FutureBuilder<void>(
-            future: _controller.initproducts(_controller.cartId.value),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Error loading data'),
-                );
-              } else {
-                return SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Column(
-                    children: [
-                      Obx(() =>
-                          ListNutshell(total: _controller.calculateTotal())),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Pesquise',
-                          ),
-                          controller: _searchController,
-                          onChanged: (_) {
-                            _listProducts();
-                          },
-                        ),
-                      ),
-                      Obx(
-                        () => ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: _controller.productsToShow.length,
-                            itemBuilder: (ctx, index) {
-                              final product = _controller.productsToShow[index];
-
-                              return ProductCard(
-                                product: product,
-                                onEdit: (Product item) =>
-                                    _openEditFormModal(context, item),
-                                onRemove: _removeItem,
-                              );
-                            }),
-                      )
-                    ],
-                  ),
-                );
-              }
-            }),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () => _openCreateFormModal(context),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
+      body: FutureBuilder<void>(
+          future: _controller.initproducts(_controller.cartId.value),
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Error loading data'),
+              );
+            } else {
+              return SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Column(
+                  children: [
+                    Obx(() =>
+                        ListNutshell(total: _controller.calculateTotal())),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'Pesquise',
+                        ),
+                        controller: _searchController,
+                        onChanged: (_) {
+                          _listProducts();
+                        },
+                      ),
+                    ),
+                    Obx(
+                      () => ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _controller.productsToShow.length,
+                          itemBuilder: (ctx, index) {
+                            final product = _controller.productsToShow[index];
+
+                            return ProductCard(
+                              product: product,
+                              onEdit: (Product item) =>
+                                  _openEditFormModal(context, item),
+                              onRemove: _removeItem,
+                            );
+                          }),
+                    )
+                  ],
+                ),
+              );
+            }
+          }),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () => _openCreateFormModal(context),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
     );
   }
 }
