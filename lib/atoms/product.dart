@@ -18,10 +18,8 @@ class ProductCard extends StatelessWidget {
   String formatMessage() {
     final total = _formatCurrency(product.unitPrice * product.quantity);
     final productQuantity = product.quantity.toInt();
-    final expirationTime = _formatDate(product.expirationTime);
 
     return 'Quantidade: $productQuantity\n'
-        'Data de vencimento: $expirationTime\n'
         'Total: $total';
   }
 

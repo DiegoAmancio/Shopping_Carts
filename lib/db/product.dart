@@ -10,14 +10,8 @@ class ProductTableDB implements CrudInterface {
   create(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawInsert(
-        'INSERT INTO Product(name, expirationTime, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?, ?)',
-        [
-          item.name,
-          item.expirationTime.toIso8601String(),
-          item.quantity,
-          item.unitPrice,
-          item.trackListId
-        ],
+        'INSERT INTO Product(name, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?)',
+        [item.name, item.quantity, item.unitPrice, item.trackListId],
       );
     });
 
@@ -43,7 +37,6 @@ class ProductTableDB implements CrudInterface {
       return Product(
         id: maps[index]['id'],
         name: maps[index]['name'],
-        expirationTime: DateTime.parse(maps[index]['expirationTime']),
         quantity: maps[index]['quantity'],
         unitPrice: maps[index]['unitPrice'],
         trackListId: maps[index]['trackListId'],
@@ -55,10 +48,9 @@ class ProductTableDB implements CrudInterface {
   update(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawUpdate(
-        'UPDATE Product SET name = ?, expirationTime = ?, quantity = ?, unitPrice = ? WHERE id = ?',
+        'UPDATE Product SET name = ?,  , quantity = ?, unitPrice = ? WHERE id = ?',
         [
           item.name,
-          item.expirationTime.toIso8601String(),
           item.quantity,
           item.unitPrice,
           item.id,
@@ -81,7 +73,6 @@ class ProductTableDB implements CrudInterface {
       return Product(
         id: maps[index]['id'],
         name: maps[index]['name'],
-        expirationTime: DateTime.parse(maps[index]['expirationTime']),
         quantity: maps[index]['quantity'],
         unitPrice: maps[index]['unitPrice'],
         trackListId: maps[index]['trackListId'],

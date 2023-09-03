@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 import '../class/currency.dart';
 import '../class/product.dart';
+import '../utils/validations.dart';
 
 class ProductPopup extends StatefulWidget {
   final Product initProduct;
+
   final void Function(Product) onSubmit;
-  const ProductPopup(
-      {Key? key, required this.onSubmit, required this.initProduct})
-      : super(key: key);
+  const ProductPopup({
+    Key? key,
+    required this.onSubmit,
+    required this.initProduct,
+  }) : super(key: key);
 
   @override
   State<ProductPopup> createState() => _ProductPopupState();
 }
 
 class _ProductPopupState extends State<ProductPopup> {
-  DateTime _selectedExpirationTime = DateTime.now();
-
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _unitPriceController = TextEditingController();
@@ -35,7 +36,6 @@ class _ProductPopupState extends State<ProductPopup> {
     _quantityController.text = widget.initProduct.quantity.toInt().toString();
     _unitPriceController.text =
         CurrencyPtBrInputFormatter.numberToReal(widget.initProduct.unitPrice);
-    _selectedExpirationTime = widget.initProduct.expirationTime;
   }
 
   _submitForm() {
@@ -47,33 +47,10 @@ class _ProductPopupState extends State<ProductPopup> {
     widget.onSubmit(Product(
       id: widget.initProduct.id,
       name: name,
-      expirationTime: _selectedExpirationTime,
       quantity: quantity,
       unitPrice: unitPrice,
       trackListId: widget.initProduct.trackListId,
     ));
-  }
-
-  _showDatePicker() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime(9999),
-    ).then((pickedDate) {
-      if (pickedDate != null) {
-        setState(() {
-          _selectedExpirationTime = pickedDate;
-        });
-      }
-    });
-  }
-
-  String? validatorInputs(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Campo vazio';
-    }
-    return null;
   }
 
   @override
@@ -134,37 +111,9 @@ class _ProductPopupState extends State<ProductPopup> {
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
                 focusNode: _unitPriceFocus,
-                onFieldSubmitted: (_) {
-                  _showDatePicker();
-                },
                 validator: (value) {
                   return validatorInputs(value);
                 },
-              ),
-              SizedBox(
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Data de Validade Selecionada'),
-                        Text(DateFormat('dd/MM/y')
-                            .format(_selectedExpirationTime)),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: const Text(
-                        'Selecionar data',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -176,7 +125,7 @@ class _ProductPopupState extends State<ProductPopup> {
                       }
                     },
                     child: Text(
-                      'Criar',
+                      'Salvar',
                       style: TextStyle(
                         color: Theme.of(context).textTheme.labelLarge?.color,
                       ),

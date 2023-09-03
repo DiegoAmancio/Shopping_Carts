@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../class/list_tab_item.dart';
+import '../utils/validations.dart';
 
 class ListFormPopup extends StatefulWidget {
   final ListTabItem initItem;
@@ -58,32 +59,17 @@ class _ListFormPopupState extends State<ListFormPopup> {
               bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
             ),
             child: Column(children: [
-              TextField(
-                  decoration: const InputDecoration(labelText: 'Nome'),
-                  controller: _titleController),
-              SizedBox(
-                height: 70,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Data Selecionada'),
-                        Text(DateFormat('dd/MM/y').format(_selectedDate)),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: _showDatePicker,
-                      child: const Text(
-                        'Selecionar data',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Nome da lista'),
+                textInputAction: TextInputAction.next,
+                controller: _titleController,
+                autofocus: true,
+                validator: (value) {
+                  return validatorInputs(value);
+                },
+                onFieldSubmitted: (_) {
+                  _submitForm();
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

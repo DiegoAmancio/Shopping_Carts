@@ -34,9 +34,8 @@ class CartScreen extends StatelessWidget {
           initProduct: Product(
               id: 0,
               name: '',
-              expirationTime: DateTime.now(),
               quantity: 1,
-              unitPrice: 1,
+              unitPrice: 0,
               trackListId: _controller.cartId.value),
           onSubmit: (Product product) => _addItem(context, product),
         );
@@ -104,7 +103,7 @@ class CartScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         decoration: const InputDecoration(
-                          hintText: 'Pesquise',
+                          hintText: 'Filtro',
                         ),
                         controller: _searchController,
                         onChanged: (_) {
