@@ -95,8 +95,6 @@ class CartScreen extends StatelessWidget {
               } else {
                 return Column(
                   children: [
-                    Obx(() =>
-                        ListNutshell(total: _controller.calculateTotal())),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
@@ -135,6 +133,8 @@ class CartScreen extends StatelessWidget {
         onPressed: () => _openCreateFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      bottomNavigationBar:
+          Obx(() => ListNutshell(total: _controller.calculateTotal())),
     );
   }
 }

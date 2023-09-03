@@ -65,7 +65,7 @@ class ProductsController extends GetxController {
 
   initproducts(int listId) async {
     await initializeDatabase();
-
+    cartId.value = listId;
     final itens = await productTableDB.getAll(database, listId);
     setproducts(itens);
     setproductsToShow(itens);

@@ -18,10 +18,8 @@ class ProductCard extends StatelessWidget {
   String formatMessage() {
     final total = _formatCurrency(product.unitPrice * product.quantity);
     final productQuantity = product.quantity.toInt();
-    final productUnitPrice = _formatCurrency(product.unitPrice);
 
     return 'Quantidade: $productQuantity\n'
-        'Preço por unidade: $productUnitPrice\n'
         'Total: $total';
   }
 
