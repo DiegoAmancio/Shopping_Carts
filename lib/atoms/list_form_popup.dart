@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../class/list_tab_item.dart';
 import '../utils/validations.dart';
@@ -29,21 +28,6 @@ class _ListFormPopupState extends State<ListFormPopup> {
     final name = _titleController.text;
     widget.onSubmit(
         ListTabItem(id: widget.initItem.id, name: name, date: _selectedDate));
-  }
-
-  _showDatePicker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2019),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate != null) {
-        setState(() {
-          _selectedDate = pickedDate;
-        });
-      }
-    });
   }
 
   @override
