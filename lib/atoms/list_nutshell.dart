@@ -10,6 +10,8 @@ class ListNutshell extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalFormated =
         NumberFormat.currency(locale: "pt_BR", symbol: "R\$").format(total);
+    const textStyle = TextStyle(
+        color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       color: Theme.of(context).primaryColor,
@@ -22,20 +24,36 @@ class ListNutshell extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 2.5,
               child: ListTile(
                 leading: const Icon(
+                  color: Colors.white,
+                  size: 40,
                   Icons.calculate,
                 ),
                 title: const Text(
                   'Total',
+                  style: textStyle,
                 ),
-                subtitle: Text(totalFormated),
+                subtitle: Text(
+                  totalFormated,
+                  style: textStyle,
+                ),
               ),
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2,
               child: ListTile(
-                leading: const Icon(Icons.shopping_cart),
-                title: const Text('Total'),
-                subtitle: Text(totalFormated),
+                leading: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                title: const Text(
+                  'No carrinho',
+                  style: textStyle,
+                ),
+                subtitle: Text(
+                  totalFormated,
+                  style: textStyle,
+                ),
               ),
             ),
           ],

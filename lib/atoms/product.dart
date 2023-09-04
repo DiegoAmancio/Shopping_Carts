@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shopping_list/atoms/popup_card_menu.dart';
 import 'package:shopping_list/class/product.dart';
 
 class ProductCard extends StatelessWidget {
@@ -19,8 +18,7 @@ class ProductCard extends StatelessWidget {
     final total = _formatCurrency(product.unitPrice * product.quantity);
     final productQuantity = product.quantity.toInt();
 
-    return 'Quantidade: $productQuantity\n'
-        'Total: $total';
+    return 'Quantidade: $productQuantity Total: $total';
   }
 
   String _formatCurrency(double amount) {
@@ -29,24 +27,27 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: ListTile(
-        title: Text(
-          product.name.toUpperCase(),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () => onEdit(product),
+      child: Card(
+        elevation: 5,
+        child: ListTile(
+          title: Text(
+            product.name.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        subtitle: Text(
-          formatMessage(),
-          style: const TextStyle(fontSize: 17),
-        ),
-        trailing: PopupCardMenu(
-          product.id,
-          onEdit: (_) => onEdit(product),
-          onRemove: onRemove,
+          subtitle: Text(
+            formatMessage(),
+            style: const TextStyle(fontSize: 17),
+          ),
+          trailing: IconButton(
+            onPressed: () => onRemove(product.id),
+            icon: const Icon(Icons.delete),
+            color: Colors.red,
+          ),
         ),
       ),
     );

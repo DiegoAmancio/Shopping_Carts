@@ -36,7 +36,8 @@ class CartScreen extends StatelessWidget {
               name: '',
               quantity: 1,
               unitPrice: 0,
-              trackListId: _controller.cartId.value),
+              trackListId: _controller.cartId.value,
+              isInTheCard: 0),
           onSubmit: (Product product) => _addItem(context, product),
         );
       },
@@ -95,18 +96,18 @@ class CartScreen extends StatelessWidget {
               } else {
                 return Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'Filtro',
-                        ),
-                        controller: _searchController,
-                        onChanged: (_) {
-                          _listProducts();
-                        },
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: TextField(
+                    //     decoration: const InputDecoration(
+                    //       hintText: 'Filtro',
+                    //     ),
+                    //     controller: _searchController,
+                    //     onChanged: (_) {
+                    //       _listProducts();
+                    //     },
+                    //   ),
+                    // ),
                     Obx(
                       () => ListView.builder(
                           primary: false,
