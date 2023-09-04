@@ -10,7 +10,7 @@ class ProductTableDB implements CrudInterface {
   create(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawInsert(
-        'INSERT INTO Product(name, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?, ?)',
+        'INSERT INTO Product(name, quantity, unitPrice, trackListId, isInTheCard) VALUES(?, ?, ?, ?, ?)',
         [
           item.name,
           item.quantity,

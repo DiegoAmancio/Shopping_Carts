@@ -6,12 +6,14 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final void Function(Product product) onEdit;
   final void Function(int id) onRemove;
+  final void Function(Product product) onPutOrRemoveFromCart;
 
   const ProductCard(
       {Key? key,
       required this.product,
       required this.onEdit,
-      required this.onRemove})
+      required this.onRemove,
+      required this.onPutOrRemoveFromCart})
       : super(key: key);
 
   String formatMessage() {
@@ -32,6 +34,23 @@ class ProductCard extends StatelessWidget {
       child: Card(
         elevation: 5,
         child: ListTile(
+          leading: Container(
+              width: 40,
+              alignment: Alignment.center,
+              child: IconButton(
+                icon: Icon(
+                  product.isInTheCard == 1
+                      ? Icons.remove_shopping_cart
+                      : Icons.add_shopping_cart,
+                  size: 30,
+                ),
+                onPressed: () {
+                  var productUpdated = product;
+                  productUpdated.isInTheCard =
+                      productUpdated.isInTheCard == 1 ? 0 : 1;
+                  onPutOrRemoveFromCart(productUpdated);
+                },
+              )),
           title: Text(
             product.name.toUpperCase(),
             style: const TextStyle(

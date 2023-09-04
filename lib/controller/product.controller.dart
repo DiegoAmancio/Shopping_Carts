@@ -27,6 +27,18 @@ class ProductsController extends GetxController {
         : 0.0;
   }
 
+  calculateTotalInTheCart() {
+    final Iterable<Product> isInTheCartList = products.isNotEmpty
+        ? products.where((product) => product.isInTheCard == 1)
+        : [];
+
+    return isInTheCartList.isNotEmpty
+        ? products
+            .map((product) => product.quantity * product.unitPrice)
+            .reduce((sum, value) => sum + value)
+        : 0.0;
+  }
+
   Future<void> addItem(Product product) async {
     final itemId = await productTableDB.create(database, product);
     product.id = itemId;

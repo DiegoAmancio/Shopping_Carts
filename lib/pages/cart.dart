@@ -56,16 +56,8 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Iterable<Product> _filterProducts(String searchText) => searchText.isEmpty
-      ? _controller.products
-      : _controller.products.where((product) =>
-          product.name.toLowerCase().contains(searchText.toLowerCase()));
-
-  _listProducts() {
-    final searchText = _searchController.value.text;
-    final productsToShow = _filterProducts(searchText).toList();
-
-    _controller.setproductsToShow(productsToShow);
+  onPutOrRemoveFromCart(Product product) {
+    _controller.updateItem(product);
   }
 
   @override
@@ -96,18 +88,6 @@ class CartScreen extends StatelessWidget {
               } else {
                 return Column(
                   children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: TextField(
-                    //     decoration: const InputDecoration(
-                    //       hintText: 'Filtro',
-                    //     ),
-                    //     controller: _searchController,
-                    //     onChanged: (_) {
-                    //       _listProducts();
-                    //     },
-                    //   ),
-                    // ),
                     Obx(
                       () => ListView.builder(
                           primary: false,
@@ -121,6 +101,7 @@ class CartScreen extends StatelessWidget {
                               onEdit: (Product item) =>
                                   _openEditFormModal(context, item),
                               onRemove: _removeItem,
+                              onPutOrRemoveFromCart: onPutOrRemoveFromCart,
                             );
                           }),
                     )
@@ -134,8 +115,9 @@ class CartScreen extends StatelessWidget {
         onPressed: () => _openCreateFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      bottomNavigationBar:
-          Obx(() => ListNutshell(total: _controller.calculateTotal())),
+      bottomNavigationBar: Obx(() => ListNutshell.fromDoubles(
+          total: _controller.calculateTotal(),
+          totalInTheCart: _controller.calculateTotalInTheCart())),
     );
   }
 }

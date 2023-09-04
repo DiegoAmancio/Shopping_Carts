@@ -4,7 +4,7 @@ class Product {
   final int quantity;
   final double unitPrice;
   final int trackListId;
-  final int isInTheCard;
+  int isInTheCard;
 
   Product({
     required this.id,
