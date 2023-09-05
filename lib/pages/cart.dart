@@ -10,7 +10,6 @@ import '../controller/product.controller.dart';
 
 class CartScreen extends StatelessWidget {
   final _controller = Get.find<ProductsController>();
-  final _searchController = TextEditingController();
 
   CartScreen({super.key});
 
@@ -60,6 +59,30 @@ class CartScreen extends StatelessWidget {
     _controller.updateItem(product);
   }
 
+  getInCartProducts() => _controller.productsToShow
+      .where((product) => product.isInTheCard == 1)
+      .toList();
+
+  getOutCartProducts() => _controller.productsToShow
+      .where((product) => product.isInTheCard == 0)
+      .toList();
+
+  createListOfProducts(BuildContext context, List<Product> list) =>
+      ListView.builder(
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: list.length,
+          itemBuilder: (ctx, index) {
+            final product = list[index];
+
+            return ProductCard(
+              product: product,
+              onEdit: (Product item) => _openEditFormModal(context, item),
+              onRemove: _removeItem,
+              onPutOrRemoveFromCart: onPutOrRemoveFromCart,
+            );
+          });
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -89,22 +112,53 @@ class CartScreen extends StatelessWidget {
                 return Column(
                   children: [
                     Obx(
-                      () => ListView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: _controller.productsToShow.length,
-                          itemBuilder: (ctx, index) {
-                            final product = _controller.productsToShow[index];
-
-                            return ProductCard(
-                              product: product,
-                              onEdit: (Product item) =>
-                                  _openEditFormModal(context, item),
-                              onRemove: _removeItem,
-                              onPutOrRemoveFromCart: onPutOrRemoveFromCart,
-                            );
-                          }),
-                    )
+                      () => Column(
+                        children: [
+                          ExpansionTile(
+                            initiallyExpanded: true,
+                            title: const Text(
+                              'Fora do carrinho',
+                              style:
+                                  TextStyle(fontSize: 18, fontFamily: 'bold'),
+                            ),
+                            trailing: Obx(() => Icon(
+                                  _controller.expandOutCartItens.value
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                )),
+                            onExpansionChanged:
+                                _controller.setExpandOutCartItens,
+                            children: [
+                              createListOfProducts(
+                                  context, getOutCartProducts())
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Obx(() => Column(
+                          children: [
+                            ExpansionTile(
+                              initiallyExpanded: true,
+                              title: const Text(
+                                'No carrinho',
+                                style:
+                                    TextStyle(fontSize: 18, fontFamily: 'bold'),
+                              ),
+                              trailing: Obx(() => Icon(
+                                    _controller.expandInCartItens.value
+                                        ? Icons.arrow_downward
+                                        : Icons.arrow_upward,
+                                  )),
+                              onExpansionChanged:
+                                  _controller.setExpandInCartItens,
+                              children: [
+                                createListOfProducts(
+                                    context, getInCartProducts())
+                              ],
+                            ),
+                          ],
+                        ))
                   ],
                 );
               }

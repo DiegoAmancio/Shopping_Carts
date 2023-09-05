@@ -43,24 +43,6 @@ class ListNutshell extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 2.2,
               child: ListTile(
                 leading: const Icon(
-                  color: Colors.white,
-                  size: 40,
-                  Icons.calculate,
-                ),
-                title: const Text(
-                  'Total',
-                  style: textStyle,
-                ),
-                subtitle: Text(
-                  total,
-                  style: textStyle,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 2.2,
-              child: ListTile(
-                leading: const Icon(
                   Icons.shopping_cart,
                   color: Colors.white,
                   size: 40,
@@ -71,6 +53,24 @@ class ListNutshell extends StatelessWidget {
                 ),
                 subtitle: Text(
                   totalInTheCart,
+                  style: textStyle,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2.2,
+              child: ListTile(
+                leading: const Icon(
+                  color: Colors.white,
+                  size: 40,
+                  Icons.calculate,
+                ),
+                title: const Text(
+                  'Total',
+                  style: textStyle,
+                ),
+                subtitle: Text(
+                  total,
                   style: textStyle,
                 ),
               ),

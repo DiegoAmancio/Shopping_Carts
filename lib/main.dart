@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: tema.copyWith(
         colorScheme: tema.colorScheme.copyWith(
-          primary: Colors.purple,
-          secondary: Colors.amber,
-        ),
+            primary: Colors.purple,
+            secondary: Colors.amber,
+            tertiary: const Color(0xFF00BCD4)),
         textTheme: tema.textTheme.copyWith(
             titleLarge: const TextStyle(
               fontFamily: 'OpenSans',
