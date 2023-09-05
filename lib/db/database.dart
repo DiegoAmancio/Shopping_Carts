@@ -13,9 +13,9 @@ class AppDatabase {
       await db.execute(
           'CREATE TABLE ListTable (id INTEGER PRIMARY KEY, name TEXT, value INTEGER, date DATETIME)');
       await db.execute(
-          'CREATE TABLE Product (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, unitPrice REAL, isInTheCard INTEGER, trackListId INTEGER, FOREIGN KEY(trackListId) REFERENCES ListTable(id))');
+          'CREATE TABLE Product (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, unitPrice REAL, isInTheCart INTEGER, trackListId INTEGER, FOREIGN KEY(trackListId) REFERENCES ListTable(id))');
     });
-    // databaseFactory.deleteDatabase(path);
+    //databaseFactory.deleteDatabase(path);
     return database;
   }
 }

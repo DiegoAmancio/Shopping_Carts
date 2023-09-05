@@ -4,7 +4,7 @@ class Product {
   final int quantity;
   final double unitPrice;
   final int trackListId;
-  int isInTheCard;
+  int isInTheCart;
 
   Product({
     required this.id,
@@ -12,6 +12,6 @@ class Product {
     required this.quantity,
     required this.unitPrice,
     required this.trackListId,
-    required this.isInTheCard,
+    required this.isInTheCart,
   });
 }

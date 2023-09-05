@@ -36,7 +36,7 @@ class CartScreen extends StatelessWidget {
               quantity: 1,
               unitPrice: 0,
               trackListId: _controller.cartId.value,
-              isInTheCard: 0),
+              isInTheCart: 0),
           onSubmit: (Product product) => _addItem(context, product),
         );
       },
@@ -55,16 +55,16 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  onPutOrRemoveFromCart(Product product) {
-    _controller.updateItem(product);
+  onPutOrRemoveFromCart(Product product) async {
+    await _controller.updateItem(product);
   }
 
   getInCartProducts() => _controller.productsToShow
-      .where((product) => product.isInTheCard == 1)
+      .where((product) => product.isInTheCart == 1)
       .toList();
 
   getOutCartProducts() => _controller.productsToShow
-      .where((product) => product.isInTheCard == 0)
+      .where((product) => product.isInTheCart == 0)
       .toList();
 
   createListOfProducts(BuildContext context, List<Product> list) =>

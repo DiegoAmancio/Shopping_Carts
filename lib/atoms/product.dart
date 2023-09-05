@@ -16,16 +16,39 @@ class ProductCard extends StatelessWidget {
       required this.onPutOrRemoveFromCart})
       : super(key: key);
 
-  String formatMessage() {
-    final total = _formatCurrency(product.unitPrice * product.quantity);
-    final productQuantity = product.quantity.toInt();
+  _formatProductQuantity() {
+    if (product.quantity < 10) {
+      final quantityFormated = product.quantity.toString();
+      return '0$quantityFormated';
+    }
 
-    return 'Quantidade: $productQuantity Total: $total';
+    return product.quantity;
+  }
+
+  String _formatMessage() {
+    final total = _formatCurrency(product.unitPrice * product.quantity);
+    final unitPrice = _formatCurrency(product.unitPrice);
+    final productQuantity = _formatProductQuantity();
+
+    return '  $productQuantity x $unitPrice Total: $total';
   }
 
   String _formatCurrency(double amount) {
     return NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$').format(amount);
   }
+
+  getStyle(BuildContext context) => product.isInTheCart == 1
+      ? TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.lineThrough,
+          decorationColor: Theme.of(context).textTheme.titleLarge?.color,
+          decorationThickness: 2.0,
+        )
+      : const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -39,27 +62,24 @@ class ProductCard extends StatelessWidget {
               alignment: Alignment.center,
               child: IconButton(
                 icon: Icon(
-                  product.isInTheCard == 1
+                  product.isInTheCart == 1
                       ? Icons.remove_shopping_cart
                       : Icons.add_shopping_cart,
                   size: 30,
                 ),
                 onPressed: () {
                   var productUpdated = product;
-                  productUpdated.isInTheCard =
-                      productUpdated.isInTheCard == 1 ? 0 : 1;
+                  productUpdated.isInTheCart =
+                      productUpdated.isInTheCart == 1 ? 0 : 1;
                   onPutOrRemoveFromCart(productUpdated);
                 },
               )),
           title: Text(
             product.name.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: getStyle(context),
           ),
           subtitle: Text(
-            formatMessage(),
+            _formatMessage(),
             style: const TextStyle(fontSize: 17),
           ),
           trailing: IconButton(

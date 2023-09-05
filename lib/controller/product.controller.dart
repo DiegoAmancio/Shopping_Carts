@@ -38,7 +38,7 @@ class ProductsController extends GetxController {
 
   calculateTotalInTheCart() {
     final Iterable<Product> isInTheCartList = products.isNotEmpty
-        ? products.where((product) => product.isInTheCard == 1)
+        ? products.where((product) => product.isInTheCart == 1)
         : [];
 
     return isInTheCartList.isNotEmpty
