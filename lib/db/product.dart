@@ -10,8 +10,14 @@ class ProductTableDB implements CrudInterface {
   create(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawInsert(
-        'INSERT INTO Product(name, quantity, unitPrice, trackListId) VALUES(?, ?, ?, ?)',
-        [item.name, item.quantity, item.unitPrice, item.trackListId],
+        'INSERT INTO Product(name, quantity, unitPrice, trackListId, isInTheCard) VALUES(?, ?, ?, ?, ?)',
+        [
+          item.name,
+          item.quantity,
+          item.unitPrice,
+          item.trackListId,
+          item.isInTheCard
+        ],
       );
     });
 
@@ -40,6 +46,7 @@ class ProductTableDB implements CrudInterface {
         quantity: maps[index]['quantity'],
         unitPrice: maps[index]['unitPrice'],
         trackListId: maps[index]['trackListId'],
+        isInTheCard: maps[index]['isInTheCard'],
       );
     });
   }
@@ -48,12 +55,13 @@ class ProductTableDB implements CrudInterface {
   update(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawUpdate(
-        'UPDATE Product SET name = ?, quantity = ?, unitPrice = ? WHERE id = ?',
+        'UPDATE Product SET name = ?, quantity = ?, unitPrice = ?, isInTheCard = ? WHERE id = ?',
         [
           item.name,
           item.quantity,
           item.unitPrice,
           item.id,
+          item.isInTheCard,
         ],
       );
     });
@@ -76,6 +84,7 @@ class ProductTableDB implements CrudInterface {
         quantity: maps[index]['quantity'],
         unitPrice: maps[index]['unitPrice'],
         trackListId: maps[index]['trackListId'],
+        isInTheCard: maps[index]['isInTheCard'],
       );
     });
   }

@@ -10,9 +10,18 @@ class ProductsController extends GetxController {
   final RxInt cartId = 0.obs;
   final RxList<Product> products = <Product>[].obs;
   final RxList<Product> productsToShow = <Product>[].obs;
-
+  final expandInCartItens = true.obs;
+  final expandOutCartItens = true.obs;
   final ProductTableDB productTableDB = ProductTableDB();
   late Database database;
+
+  setExpandInCartItens(bool command) {
+    expandInCartItens.value = command;
+  }
+
+  setExpandOutCartItens(bool command) {
+    expandOutCartItens.value = command;
+  }
 
   Future<void> initializeDatabase() async {
     final db = await AppDatabase().getDB();
@@ -22,6 +31,18 @@ class ProductsController extends GetxController {
   calculateTotal() {
     return products.isNotEmpty
         ? products
+            .map((product) => product.quantity * product.unitPrice)
+            .reduce((sum, value) => sum + value)
+        : 0.0;
+  }
+
+  calculateTotalInTheCart() {
+    final Iterable<Product> isInTheCartList = products.isNotEmpty
+        ? products.where((product) => product.isInTheCard == 1)
+        : [];
+
+    return isInTheCartList.isNotEmpty
+        ? isInTheCartList
             .map((product) => product.quantity * product.unitPrice)
             .reduce((sum, value) => sum + value)
         : 0.0;
@@ -65,7 +86,7 @@ class ProductsController extends GetxController {
 
   initproducts(int listId) async {
     await initializeDatabase();
-
+    cartId.value = listId;
     final itens = await productTableDB.getAll(database, listId);
     setproducts(itens);
     setproductsToShow(itens);

@@ -50,6 +50,7 @@ class _ProductPopupState extends State<ProductPopup> {
       quantity: quantity,
       unitPrice: unitPrice,
       trackListId: widget.initProduct.trackListId,
+      isInTheCard: widget.initProduct.isInTheCard,
     ));
   }
 

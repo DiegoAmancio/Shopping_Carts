@@ -10,7 +10,6 @@ import '../controller/product.controller.dart';
 
 class CartScreen extends StatelessWidget {
   final _controller = Get.find<ProductsController>();
-  final _searchController = TextEditingController();
 
   CartScreen({super.key});
 
@@ -36,7 +35,8 @@ class CartScreen extends StatelessWidget {
               name: '',
               quantity: 1,
               unitPrice: 0,
-              trackListId: _controller.cartId.value),
+              trackListId: _controller.cartId.value,
+              isInTheCard: 0),
           onSubmit: (Product product) => _addItem(context, product),
         );
       },
@@ -55,18 +55,34 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Iterable<Product> _filterProducts(String searchText) => searchText.isEmpty
-      ? _controller.products
-      : _controller.products.where((product) =>
-          product.name.toLowerCase().contains(searchText.toLowerCase()));
-
-  _listProducts() {
-    final searchText = _searchController.value.text;
-    final productsToShow = _filterProducts(searchText).toList();
-
-    _controller.setproductsToShow(productsToShow);
+  onPutOrRemoveFromCart(Product product) {
+    _controller.updateItem(product);
   }
 
+  getInCartProducts() => _controller.productsToShow
+      .where((product) => product.isInTheCard == 1)
+      .toList();
+
+  getOutCartProducts() => _controller.productsToShow
+      .where((product) => product.isInTheCard == 0)
+      .toList();
+
+  createListOfProducts(BuildContext context, List<Product> list) =>
+      ListView.builder(
+          primary: false,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: list.length,
+          itemBuilder: (ctx, index) {
+            final product = list[index];
+
+            return ProductCard(
+              product: product,
+              onEdit: (Product item) => _openEditFormModal(context, item),
+              onRemove: _removeItem,
+              onPutOrRemoveFromCart: onPutOrRemoveFromCart,
+            );
+          });
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
@@ -95,36 +111,54 @@ class CartScreen extends StatelessWidget {
               } else {
                 return Column(
                   children: [
-                    Obx(() =>
-                        ListNutshell(total: _controller.calculateTotal())),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: 'Filtro',
-                        ),
-                        controller: _searchController,
-                        onChanged: (_) {
-                          _listProducts();
-                        },
+                    Obx(
+                      () => Column(
+                        children: [
+                          ExpansionTile(
+                            initiallyExpanded: true,
+                            title: const Text(
+                              'Fora do carrinho',
+                              style:
+                                  TextStyle(fontSize: 18, fontFamily: 'bold'),
+                            ),
+                            trailing: Obx(() => Icon(
+                                  _controller.expandOutCartItens.value
+                                      ? Icons.arrow_downward
+                                      : Icons.arrow_upward,
+                                )),
+                            onExpansionChanged:
+                                _controller.setExpandOutCartItens,
+                            children: [
+                              createListOfProducts(
+                                  context, getOutCartProducts())
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    Obx(
-                      () => ListView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: _controller.productsToShow.length,
-                          itemBuilder: (ctx, index) {
-                            final product = _controller.productsToShow[index];
-
-                            return ProductCard(
-                              product: product,
-                              onEdit: (Product item) =>
-                                  _openEditFormModal(context, item),
-                              onRemove: _removeItem,
-                            );
-                          }),
-                    )
+                    Obx(() => Column(
+                          children: [
+                            ExpansionTile(
+                              initiallyExpanded: true,
+                              title: const Text(
+                                'No carrinho',
+                                style:
+                                    TextStyle(fontSize: 18, fontFamily: 'bold'),
+                              ),
+                              trailing: Obx(() => Icon(
+                                    _controller.expandInCartItens.value
+                                        ? Icons.arrow_downward
+                                        : Icons.arrow_upward,
+                                  )),
+                              onExpansionChanged:
+                                  _controller.setExpandInCartItens,
+                              children: [
+                                createListOfProducts(
+                                    context, getInCartProducts())
+                              ],
+                            ),
+                          ],
+                        ))
                   ],
                 );
               }
@@ -135,6 +169,9 @@ class CartScreen extends StatelessWidget {
         onPressed: () => _openCreateFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+      bottomNavigationBar: Obx(() => ListNutshell.fromDoubles(
+          total: _controller.calculateTotal(),
+          totalInTheCart: _controller.calculateTotalInTheCart())),
     );
   }
 }
