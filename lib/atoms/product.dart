@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
     final unitPrice = _formatCurrency(product.unitPrice);
     final productQuantity = _formatProductQuantity();
     final totalLabel = 'total'.tr;
-    return '  $productQuantity x $unitPrice $totalLabel: $total';
+    return '$productQuantity x $unitPrice $totalLabel: $total';
   }
 
   String _formatCurrency(double amount) {

@@ -18,7 +18,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData tema = ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.purple,
+        primarySwatch: const MaterialColor(0xFF226FE3, <int, Color>{
+          50: Color(0xFFE0F0FF),
+          100: Color(0xFFB3D2FF),
+          200: Color(0xFF80ABFF),
+          300: Color(0xFF4D84FF),
+          400: Color(0xFF226FE3),
+          500: Color(0xFF1C64D4), // Your primary color
+          600: Color(0xFF195ABE),
+          700: Color(0xFF1550A9),
+          800: Color(0xFF124695),
+          900: Color(0xFF0E3C80),
+        }),
         fontFamily: 'QuickSand');
 
     return GetMaterialApp(
@@ -27,13 +38,14 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => ProductsController());
       }),
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       locale: Get.deviceLocale,
       fallbackLocale: const Locale('en', 'US'),
       translations: AppTranslations(),
       theme: tema.copyWith(
         colorScheme: tema.colorScheme.copyWith(
-            primary: Colors.purple,
-            secondary: Colors.amber,
+            primary: const Color(0xFF267CFF),
+            secondary: const Color(0xFF4D94FF),
             tertiary: const Color(0xFF00BCD4)),
         textTheme: tema.textTheme.copyWith(
             titleLarge: const TextStyle(
