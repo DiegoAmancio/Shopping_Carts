@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shopping_list/class/product.dart';
 
@@ -29,8 +30,8 @@ class ProductCard extends StatelessWidget {
     final total = _formatCurrency(product.unitPrice * product.quantity);
     final unitPrice = _formatCurrency(product.unitPrice);
     final productQuantity = _formatProductQuantity();
-
-    return '  $productQuantity x $unitPrice Total: $total';
+    final totalLabel = 'total'.tr;
+    return '  $productQuantity x $unitPrice $totalLabel: $total';
   }
 
   String _formatCurrency(double amount) {

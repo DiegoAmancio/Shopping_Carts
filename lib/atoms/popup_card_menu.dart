@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PopupCardMenu extends StatelessWidget {
   final int id;
@@ -14,13 +15,13 @@ class PopupCardMenu extends StatelessWidget {
         icon: const Icon(Icons.more_vert),
         itemBuilder: (context) {
           return [
-            const PopupMenuItem<int>(
+            PopupMenuItem<int>(
               value: 0,
-              child: Text("Editar"),
+              child: Text('edit'.tr),
             ),
-            const PopupMenuItem<int>(
+            PopupMenuItem<int>(
               value: 1,
-              child: Text("Remover"),
+              child: Text('remove'.tr),
             ),
           ];
         },

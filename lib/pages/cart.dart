@@ -116,10 +116,10 @@ class CartScreen extends StatelessWidget {
                         children: [
                           ExpansionTile(
                             initiallyExpanded: true,
-                            title: const Text(
-                              'Fora do carrinho',
-                              style:
-                                  TextStyle(fontSize: 18, fontFamily: 'bold'),
+                            title: Text(
+                              'out_of_cart'.tr,
+                              style: const TextStyle(
+                                  fontSize: 18, fontFamily: 'bold'),
                             ),
                             trailing: Obx(() => Icon(
                                   _controller.expandOutCartItens.value
@@ -140,10 +140,10 @@ class CartScreen extends StatelessWidget {
                           children: [
                             ExpansionTile(
                               initiallyExpanded: true,
-                              title: const Text(
-                                'No carrinho',
-                                style:
-                                    TextStyle(fontSize: 18, fontFamily: 'bold'),
+                              title: Text(
+                                'in_the_cart'.tr,
+                                style: const TextStyle(
+                                    fontSize: 18, fontFamily: 'bold'),
                               ),
                               trailing: Obx(() => Icon(
                                     _controller.expandInCartItens.value

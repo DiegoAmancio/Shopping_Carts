@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Text('Listas', style: TextStyle(fontSize: 18)),
+                  Text('lists'.tr, style: const TextStyle(fontSize: 18)),
                   const SizedBox(
                     height: 10,
                   ),

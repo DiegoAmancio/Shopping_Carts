@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../class/currency.dart';
 import '../class/product.dart';
@@ -73,7 +74,7 @@ class _ProductPopupState extends State<ProductPopup> {
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Nome do produto'),
+                decoration: InputDecoration(labelText: 'product_name'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _nameController,
                 validator: (value) {
@@ -85,7 +86,7 @@ class _ProductPopupState extends State<ProductPopup> {
                 autofocus: true,
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Quantidade'),
+                decoration: InputDecoration(labelText: 'quantity'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _quantityController,
                 keyboardType: TextInputType.number,
@@ -101,8 +102,7 @@ class _ProductPopupState extends State<ProductPopup> {
                 },
               ),
               TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'Preço por unidade'),
+                decoration: InputDecoration(labelText: 'price_per_unity'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _unitPriceController,
                 inputFormatters: [
@@ -126,7 +126,7 @@ class _ProductPopupState extends State<ProductPopup> {
                       }
                     },
                     child: Text(
-                      'Salvar',
+                      'save'.tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.labelLarge?.color,
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../class/list_tab_item.dart';
 import '../utils/validations.dart';
@@ -44,7 +45,7 @@ class _ListFormPopupState extends State<ListFormPopup> {
             ),
             child: Column(children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Nome da lista'),
+                decoration: InputDecoration(labelText: 'name_of_list'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _titleController,
                 autofocus: true,
@@ -63,7 +64,7 @@ class _ListFormPopupState extends State<ListFormPopup> {
                         ? null
                         : _submitForm,
                     child: Text(
-                      'Salvar',
+                      'save'.tr,
                       style: TextStyle(
                         color: Theme.of(context).textTheme.labelLarge?.color,
                       ),

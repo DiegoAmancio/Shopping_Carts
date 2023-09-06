@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ListNutshell extends StatelessWidget {
@@ -47,8 +48,8 @@ class ListNutshell extends StatelessWidget {
                   color: Colors.white,
                   size: 40,
                 ),
-                title: const Text(
-                  'No carrinho',
+                title: Text(
+                  'in_the_cart'.tr,
                   style: textStyle,
                 ),
                 subtitle: Text(
@@ -65,8 +66,8 @@ class ListNutshell extends StatelessWidget {
                   size: 40,
                   Icons.calculate,
                 ),
-                title: const Text(
-                  'Total',
+                title: Text(
+                  'total'.tr,
                   style: textStyle,
                 ),
                 subtitle: Text(

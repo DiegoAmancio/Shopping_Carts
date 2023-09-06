@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:shopping_list/pages/home.dart';
 import 'package:shopping_list/pages/cart.dart';
 
+import 'class/translations.dart';
 import 'controller/cart.controller.dart';
 import 'controller/product.controller.dart';
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         Get.lazyPut(() => ProductsController());
       }),
       title: 'Flutter Demo',
+      locale: Get.deviceLocale,
+      fallbackLocale: const Locale('en', 'US'),
+      translations: AppTranslations(),
       theme: tema.copyWith(
         colorScheme: tema.colorScheme.copyWith(
             primary: Colors.purple,
