@@ -14,7 +14,8 @@ class AppTranslations extends Translations {
           'quantity': 'Quantity',
           'price_per_unity': 'Price per unity',
           'edit': 'Edit',
-          'remove': 'Remove'
+          'remove': 'Remove',
+          'insert_to_cart': 'Insert to cart'
         },
         'pt_BR': {
           'total': 'Total',
@@ -27,7 +28,8 @@ class AppTranslations extends Translations {
           'quantity': 'Quantidade',
           'price_per_unity': 'Preço por unidade',
           'edit': 'Editar',
-          'remove': 'Remover'
+          'remove': 'Remover',
+          'insert_to_cart': 'Inserir no carrinho'
         }
       };
 }

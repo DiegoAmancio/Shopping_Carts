@@ -24,7 +24,7 @@ class _ProductPopupState extends State<ProductPopup> {
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
   final _unitPriceController = TextEditingController();
-
+  var putInTheCart = false;
   final _formKey = GlobalKey<FormState>();
 
   final _quantityFocus = FocusNode();
@@ -44,6 +44,7 @@ class _ProductPopupState extends State<ProductPopup> {
     final int quantity = int.parse(_quantityController.text);
     final double unitPrice =
         CurrencyPtBrInputFormatter.maskRealToDouble(_unitPriceController.text);
+    final isInTheCart = putInTheCart ? 1 : 0;
 
     widget.onSubmit(Product(
       id: widget.initProduct.id,
@@ -51,7 +52,7 @@ class _ProductPopupState extends State<ProductPopup> {
       quantity: quantity,
       unitPrice: unitPrice,
       trackListId: widget.initProduct.trackListId,
-      isInTheCart: widget.initProduct.isInTheCart,
+      isInTheCart: isInTheCart,
     ));
   }
 
@@ -101,20 +102,55 @@ class _ProductPopupState extends State<ProductPopup> {
                   return validatorInputs(value);
                 },
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'price_per_unity'.tr),
-                textInputAction: TextInputAction.next,
-                controller: _unitPriceController,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CurrencyPtBrInputFormatter()
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.60,
+                    child: TextFormField(
+                      decoration:
+                          InputDecoration(labelText: 'price_per_unity'.tr),
+                      textInputAction: TextInputAction.next,
+                      controller: _unitPriceController,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        CurrencyPtBrInputFormatter()
+                      ],
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      focusNode: _unitPriceFocus,
+                      validator: (value) {
+                        return validatorInputs(value);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 10,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('insert_to_cart'.tr),
+                        Row(
+                          children: [
+                            const Icon(Icons.shopping_cart),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Colors.green,
+                              value: putInTheCart,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  putInTheCart = value!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 ],
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                focusNode: _unitPriceFocus,
-                validator: (value) {
-                  return validatorInputs(value);
-                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
