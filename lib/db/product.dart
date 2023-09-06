@@ -55,13 +55,14 @@ class ProductTableDB implements CrudInterface {
   update(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawUpdate(
-        'UPDATE Product SET name = ?, quantity = ?, unitPrice = ?, isInTheCart = ? WHERE id = ?',
+        'UPDATE Product SET name = ?, quantity = ?, unitPrice = ?, trackListId = ?, isInTheCart = ? WHERE id = ?',
         [
           item.name,
           item.quantity,
           item.unitPrice,
-          item.id,
+          item.trackListId,
           item.isInTheCart,
+          item.id,
         ],
       );
     });

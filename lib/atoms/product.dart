@@ -61,17 +61,13 @@ class ProductCard extends StatelessWidget {
           leading: Container(
               width: 40,
               alignment: Alignment.center,
-              child: IconButton(
-                icon: Icon(
-                  product.isInTheCart == 1
-                      ? Icons.remove_shopping_cart
-                      : Icons.add_shopping_cart,
-                  size: 30,
-                ),
-                onPressed: () {
+              child: Checkbox(
+                checkColor: Colors.white,
+                activeColor: Colors.green,
+                value: product.isInTheCart == 1,
+                onChanged: (bool? value) {
                   var productUpdated = product;
-                  productUpdated.isInTheCart =
-                      productUpdated.isInTheCart == 1 ? 0 : 1;
+                  productUpdated.isInTheCart = value != null && value ? 1 : 0;
                   onPutOrRemoveFromCart(productUpdated);
                 },
               )),
