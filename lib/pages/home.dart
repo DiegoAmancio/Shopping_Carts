@@ -58,8 +58,8 @@ class HomeScreen extends StatelessWidget {
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Shopping list',
+        title: Text(
+          'lists'.tr,
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -78,10 +78,6 @@ class HomeScreen extends StatelessWidget {
             } else {
               return Column(
                 children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text('lists'.tr, style: const TextStyle(fontSize: 18)),
                   const SizedBox(
                     height: 10,
                   ),

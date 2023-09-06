@@ -6,7 +6,7 @@ class AppTranslations extends Translations {
         'en_US': {
           'total': 'Total',
           'in_the_cart': 'In the cart',
-          'lists': 'lists',
+          'lists': 'Lists',
           'name_of_list': 'Name of list',
           'save': 'Save',
           'out_of_cart': 'Out of cart',
@@ -19,7 +19,7 @@ class AppTranslations extends Translations {
         'pt_BR': {
           'total': 'Total',
           'in_the_cart': 'No carrinho',
-          'lists': 'listas',
+          'lists': 'Listas',
           'name_of_list': 'Nome da lista',
           'salvar': 'Salvar',
           'out_of_cart': 'Fora do carrinho',
