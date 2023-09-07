@@ -163,9 +163,6 @@ class _ProductPopupState extends State<ProductPopup> {
                     },
                     child: Text(
                       'save'.tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.labelLarge?.color,
-                      ),
                     ),
                   ),
                 ],
