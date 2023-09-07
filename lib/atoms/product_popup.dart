@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../class/currency.dart';
 import '../class/product.dart';
-import '../utils/validations.dart';
 
 class ProductPopup extends StatefulWidget {
   final Product initProduct;
@@ -26,9 +25,17 @@ class _ProductPopupState extends State<ProductPopup> {
   final _unitPriceController = TextEditingController();
   var putInTheCart = false;
   final _formKey = GlobalKey<FormState>();
+  bool _isButtonEnabled = false;
 
   final _quantityFocus = FocusNode();
   final _unitPriceFocus = FocusNode();
+
+  void _updateButtonState() {
+    setState(() {
+      _isButtonEnabled = _nameController.text.isNotEmpty &&
+          _quantityController.text.isNotEmpty;
+    });
+  }
 
   @override
   void initState() {
@@ -37,6 +44,16 @@ class _ProductPopupState extends State<ProductPopup> {
     _quantityController.text = widget.initProduct.quantity.toInt().toString();
     _unitPriceController.text =
         CurrencyPtBrInputFormatter.numberToReal(widget.initProduct.unitPrice);
+    _nameController.addListener(_updateButtonState);
+    _quantityController.addListener(_updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _quantityController.dispose();
+    _unitPriceController.dispose();
+    super.dispose();
   }
 
   _submitForm() {
@@ -78,9 +95,6 @@ class _ProductPopupState extends State<ProductPopup> {
                 decoration: InputDecoration(labelText: 'product_name'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _nameController,
-                validator: (value) {
-                  return validatorInputs(value);
-                },
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_quantityFocus);
                 },
@@ -97,9 +111,6 @@ class _ProductPopupState extends State<ProductPopup> {
                 focusNode: _quantityFocus,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_unitPriceFocus);
-                },
-                validator: (value) {
-                  return validatorInputs(value);
                 },
               ),
               Row(
@@ -118,9 +129,6 @@ class _ProductPopupState extends State<ProductPopup> {
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       focusNode: _unitPriceFocus,
-                      validator: (value) {
-                        return validatorInputs(value);
-                      },
                     ),
                   ),
                   Padding(
@@ -156,11 +164,7 @@ class _ProductPopupState extends State<ProductPopup> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _submitForm();
-                      }
-                    },
+                    onPressed: _isButtonEnabled ? _submitForm : null,
                     child: Text(
                       'save'.tr,
                     ),

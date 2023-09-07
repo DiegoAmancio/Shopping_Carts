@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../class/list_tab_item.dart';
-import '../utils/validations.dart';
 
 class ListFormPopup extends StatefulWidget {
   final ListTabItem initItem;
@@ -17,12 +16,26 @@ class _ListFormPopupState extends State<ListFormPopup> {
   final _titleController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
+  bool _isButtonEnabled = false;
+
+  void _updateButtonState() {
+    setState(() {
+      _isButtonEnabled = _titleController.text.isNotEmpty;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _titleController.text = widget.initItem.name;
     _selectedDate = widget.initItem.date;
+    _titleController.addListener(_updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
   }
 
   _submitForm() {
@@ -49,9 +62,6 @@ class _ListFormPopupState extends State<ListFormPopup> {
                 textInputAction: TextInputAction.next,
                 controller: _titleController,
                 autofocus: true,
-                validator: (value) {
-                  return validatorInputs(value);
-                },
                 onFieldSubmitted: (_) {
                   _submitForm();
                 },
@@ -60,9 +70,7 @@ class _ListFormPopupState extends State<ListFormPopup> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: _titleController.value.text.isEmpty
-                        ? null
-                        : _submitForm,
+                    onPressed: _isButtonEnabled ? _submitForm : null,
                     child: Text(
                       'save'.tr,
                     ),
