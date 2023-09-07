@@ -65,9 +65,6 @@ class _ListFormPopupState extends State<ListFormPopup> {
                         : _submitForm,
                     child: Text(
                       'save'.tr,
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.labelLarge?.color,
-                      ),
                     ),
                   ),
                 ],

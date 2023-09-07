@@ -71,14 +71,18 @@ class AppTheme {
       expansionTileTheme: theme.expansionTileTheme
           .copyWith(textColor: Colors.white, iconColor: Colors.white),
       inputDecorationTheme: theme.inputDecorationTheme.copyWith(
-        labelStyle: const TextStyle(color: Colors.white, fontSize: 18),
+        labelStyle: const TextStyle(
+          color: Colors.white,
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
       ),
       textTheme: theme.textTheme.copyWith(
           titleSmall: const TextStyle(color: Colors.white),
           titleMedium: const TextStyle(color: Colors.white),
           titleLarge: const TextStyle(
             fontFamily: 'OpenSans',
-            fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
