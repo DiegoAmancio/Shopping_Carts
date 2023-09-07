@@ -29,7 +29,8 @@ class AppTranslations extends Translations {
           'price_per_unity': 'Preço por unidade',
           'edit': 'Editar',
           'remove': 'Remover',
-          'insert_to_cart': 'Inserir no carrinho'
+          'insert_to_cart': 'Inserir no carrinho',
+          'save': 'Salvar',
         }
       };
 }
