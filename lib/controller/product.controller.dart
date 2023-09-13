@@ -7,7 +7,7 @@ import '../db/database.dart';
 import '../db/product.dart';
 
 class ProductsController extends GetxController {
-  final RxInt cartId = 0.obs;
+  final RxInt _cartId = 0.obs;
   final RxList<Product> products = <Product>[].obs;
   final RxList<Product> productsToShow = <Product>[].obs;
   final expandInCartItens = true.obs;
@@ -15,8 +15,16 @@ class ProductsController extends GetxController {
   final ProductTableDB productTableDB = ProductTableDB();
   late Database database;
 
+  int get cartId {
+    return _cartId.value;
+  }
+
   setExpandInCartItens(bool command) {
     expandInCartItens.value = command;
+  }
+
+  setCartId(int value) {
+    _cartId.value = value;
   }
 
   setExpandOutCartItens(bool command) {
@@ -86,7 +94,7 @@ class ProductsController extends GetxController {
 
   initproducts(int listId) async {
     await initializeDatabase();
-    cartId.value = listId;
+    _cartId.value = listId;
     final itens = await productTableDB.getAll(database, listId);
     setproducts(itens);
     setproductsToShow(itens);

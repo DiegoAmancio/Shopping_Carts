@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_list/controller/cart.controller.dart';
+import 'package:shopping_list/controller/product.controller.dart';
 
 import '../class/list_tab_item.dart';
 import '../atoms/list_form_popup.dart';
 import '../molecules/list_tab.dart';
 
 class HomeScreen extends StatelessWidget {
-  final _controller = Get.find<CartController>();
+  final _cartController = Get.find<CartController>();
+  final _productController = Get.find<ProductsController>();
 
   HomeScreen({super.key});
 
   _addItem(BuildContext context, ListTabItem item) async {
-    _controller.addItem(item).then((value) => Navigator.of(context).pop());
+    _cartController.addItem(item).then((value) => Navigator.of(context).pop());
   }
 
   Future<void> _editItem(BuildContext context, ListTabItem item) async {
-    _controller.updateItem(item).then((value) => Navigator.of(context).pop());
+    _cartController
+        .updateItem(item)
+        .then((value) => Navigator.of(context).pop());
   }
 
   _removeItem(int id) async {
-    _controller.deleteItem(id);
+    _cartController.deleteItem(id);
   }
 
   _openCreateFormModal(BuildContext context) {
@@ -44,11 +48,21 @@ class HomeScreen extends StatelessWidget {
       builder: (_) {
         return ListFormPopup(
           (ListTabItem item) => _editItem(context, item),
-          initItem: _controller.lists
+          initItem: _cartController.lists
               .where((element) => element.id == id)
               .toList()[0],
         );
       },
+    );
+  }
+
+  openCartList(BuildContext context, ListTabItem item) {
+    _productController.setCartId(item.id);
+
+    Navigator.pushNamed(
+      context,
+      '/list',
+      arguments: {'item': item},
     );
   }
 
@@ -65,7 +79,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<void>(
-          future: _controller.initLists(),
+          future: _cartController.initLists(),
           builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
             if (!snapshot.hasData) {
               return const Center(
@@ -84,11 +98,14 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(
                       height: availableHeight * 0.7,
                       child: Obx(() => ListView.builder(
-                            itemCount: _controller.lists.length,
+                            itemCount: _cartController.lists.length,
                             itemBuilder: (ctx, index) {
-                              final item = _controller.lists[index];
+                              final item = _cartController.lists[index];
                               return ListTab(
                                 item: item,
+                                openCartList: () {
+                                  openCartList(context, item);
+                                },
                                 onEdit: (int id) =>
                                     _openEditFormModal(context, id),
                                 onRemove: _removeItem,

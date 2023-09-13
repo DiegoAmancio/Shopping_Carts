@@ -35,7 +35,7 @@ class CartScreen extends StatelessWidget {
               name: '',
               quantity: 1,
               unitPrice: 0,
-              trackListId: _controller.cartId.value,
+              trackListId: _controller.cartId,
               isInTheCart: 0),
           onSubmit: (Product product) => _addItem(context, product),
         );
@@ -86,19 +86,19 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    final propsItem = arguments['item'] as ListTabItem;
+    final listPropsItem = arguments['item'] as ListTabItem;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(
-          propsItem.name,
+          listPropsItem.name,
         ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<void>(
-            future: _controller.initproducts(_controller.cartId.value),
+            future: _controller.initproducts(listPropsItem.id),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
               if (!snapshot.hasData) {
                 return const Center(
