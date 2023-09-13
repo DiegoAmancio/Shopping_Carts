@@ -122,7 +122,7 @@ class CartScreen extends StatelessWidget {
                                   fontSize: 18, fontFamily: 'bold'),
                             ),
                             trailing: Obx(() => Icon(
-                                  _controller.expandOutCartItens.value
+                                  _controller.expandOutCartItens
                                       ? Icons.arrow_downward
                                       : Icons.arrow_upward,
                                 )),
@@ -146,7 +146,7 @@ class CartScreen extends StatelessWidget {
                                     fontSize: 18, fontFamily: 'bold'),
                               ),
                               trailing: Obx(() => Icon(
-                                    _controller.expandInCartItens.value
+                                    _controller.expandInCartItens
                                         ? Icons.arrow_downward
                                         : Icons.arrow_upward,
                                   )),

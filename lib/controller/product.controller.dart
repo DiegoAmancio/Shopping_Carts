@@ -8,19 +8,35 @@ import '../db/product.dart';
 
 class ProductsController extends GetxController {
   final RxInt _cartId = 0.obs;
-  final RxList<Product> products = <Product>[].obs;
-  final RxList<Product> productsToShow = <Product>[].obs;
-  final expandInCartItens = true.obs;
-  final expandOutCartItens = true.obs;
-  final ProductTableDB productTableDB = ProductTableDB();
-  late Database database;
+  final RxList<Product> _products = <Product>[].obs;
+  final RxList<Product> _productsToShow = <Product>[].obs;
+  final RxBool _expandInCartItens = true.obs;
+  final RxBool _expandOutCartItens = true.obs;
+  final ProductTableDB _productTableDB = ProductTableDB();
+  late Database _database;
+
+  List<Product> get products {
+    return _products;
+  }
+
+  List<Product> get productsToShow {
+    return _productsToShow;
+  }
 
   int get cartId {
     return _cartId.value;
   }
 
+  bool get expandInCartItens {
+    return _expandInCartItens.value;
+  }
+
+  bool get expandOutCartItens {
+    return _expandOutCartItens.value;
+  }
+
   setExpandInCartItens(bool command) {
-    expandInCartItens.value = command;
+    _expandInCartItens.value = command;
   }
 
   setCartId(int value) {
@@ -28,12 +44,12 @@ class ProductsController extends GetxController {
   }
 
   setExpandOutCartItens(bool command) {
-    expandOutCartItens.value = command;
+    _expandOutCartItens.value = command;
   }
 
   Future<void> initializeDatabase() async {
     final db = await AppDatabase().getDB();
-    database = db;
+    _database = db;
   }
 
   calculateTotal() {
@@ -57,14 +73,14 @@ class ProductsController extends GetxController {
   }
 
   Future<void> addItem(Product product) async {
-    final itemId = await productTableDB.create(database, product);
+    final itemId = await _productTableDB.create(_database, product);
     product.id = itemId;
     products.add(product);
     productsToShow.add(product);
   }
 
   Future<void> updateItem(Product product) async {
-    await productTableDB.update(database, product);
+    await _productTableDB.update(_database, product);
     int index = products.indexWhere((element) => element.id == product.id);
     products[index] = product;
 
@@ -75,7 +91,7 @@ class ProductsController extends GetxController {
   }
 
   deleteItem(int id) async {
-    await productTableDB.delete(database, id);
+    await _productTableDB.delete(_database, id);
     int indexToShow = productsToShow.indexWhere((element) => element.id == id);
     productsToShow.removeAt(indexToShow);
     int index = products.indexWhere((element) => element.id == id);
@@ -95,7 +111,7 @@ class ProductsController extends GetxController {
   initproducts(int listId) async {
     await initializeDatabase();
     _cartId.value = listId;
-    final itens = await productTableDB.getAll(database, listId);
+    final itens = await _productTableDB.getAll(_database, listId);
     setproducts(itens);
     setproductsToShow(itens);
 
