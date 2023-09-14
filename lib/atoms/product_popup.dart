@@ -22,10 +22,22 @@ class ProductPopup extends StatefulWidget {
 class _ProductPopupState extends State<ProductPopup> {
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController();
+  final _unitController = TextEditingController();
   final _unitPriceController = TextEditingController();
   var putInTheCart = false;
   final _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
+
+  String _unitValue = 'un'; // Valor inicial do dropdown
+  final List<String> _unitOptions = [
+    'un',
+    'ml',
+    'L',
+    'kg',
+    'g',
+    'caixa',
+    'embalagem'
+  ];
 
   final _quantityFocus = FocusNode();
   final _unitPriceFocus = FocusNode();
@@ -100,18 +112,45 @@ class _ProductPopupState extends State<ProductPopup> {
                 },
                 autofocus: true,
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'quantity'.tr),
-                textInputAction: TextInputAction.next,
-                controller: _quantityController,
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.60,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'quantity'.tr),
+                      textInputAction: TextInputAction.next,
+                      controller: _quantityController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      focusNode: _quantityFocus,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_unitPriceFocus);
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      child: DropdownButtonFormField<String>(
+                        value: _unitValue,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _unitValue = newValue!;
+                            _unitController.text = newValue;
+                          });
+                        },
+                        items: _unitOptions
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      )),
                 ],
-                focusNode: _quantityFocus,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_unitPriceFocus);
-                },
               ),
               Row(
                 children: [
