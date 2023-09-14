@@ -34,9 +34,10 @@ class CartScreen extends StatelessWidget {
               id: 0,
               name: '',
               quantity: 1,
-              unitPrice: 0,
+              price: 0,
               trackListId: _controller.cartId,
-              isInTheCart: 0),
+              isInTheCart: 0,
+              unit: 'unit'),
           onSubmit: (Product product) => _addItem(context, product),
         );
       },

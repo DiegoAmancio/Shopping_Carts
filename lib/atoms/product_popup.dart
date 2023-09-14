@@ -28,16 +28,8 @@ class _ProductPopupState extends State<ProductPopup> {
   final _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
 
-  String _unitValue = 'un'; // Valor inicial do dropdown
-  final List<String> _unitOptions = [
-    'un',
-    'ml',
-    'L',
-    'kg',
-    'g',
-    'caixa',
-    'embalagem'
-  ];
+  final List<String> _unitOptions = ['unit', 'ml', 'kg', 'g', 'box', 'package'];
+  String _unitValue = 'unit';
 
   final _quantityFocus = FocusNode();
   final _unitPriceFocus = FocusNode();
@@ -55,7 +47,9 @@ class _ProductPopupState extends State<ProductPopup> {
     _nameController.text = widget.initProduct.name;
     _quantityController.text = widget.initProduct.quantity.toInt().toString();
     _unitPriceController.text =
-        CurrencyPtBrInputFormatter.numberToReal(widget.initProduct.unitPrice);
+        CurrencyPtBrInputFormatter.numberToReal(widget.initProduct.price);
+    _unitController.text = widget.initProduct.unit;
+
     _nameController.addListener(_updateButtonState);
     _quantityController.addListener(_updateButtonState);
   }
@@ -69,20 +63,19 @@ class _ProductPopupState extends State<ProductPopup> {
   }
 
   _submitForm() {
-    final name = _nameController.text;
-    final int quantity = int.parse(_quantityController.text);
-    final double unitPrice =
+    final int quantity =
+        int.parse(_quantityController.text.replaceAll(',', '.'));
+    final double price =
         CurrencyPtBrInputFormatter.maskRealToDouble(_unitPriceController.text);
-    final isInTheCart = putInTheCart ? 1 : 0;
 
     widget.onSubmit(Product(
-      id: widget.initProduct.id,
-      name: name,
-      quantity: quantity,
-      unitPrice: unitPrice,
-      trackListId: widget.initProduct.trackListId,
-      isInTheCart: isInTheCart,
-    ));
+        id: widget.initProduct.id,
+        name: _nameController.text,
+        quantity: quantity,
+        price: price,
+        trackListId: widget.initProduct.trackListId,
+        isInTheCart: putInTheCart ? 1 : 0,
+        unit: _unitController.text));
   }
 
   @override
@@ -123,9 +116,6 @@ class _ProductPopupState extends State<ProductPopup> {
                       textInputAction: TextInputAction.next,
                       controller: _quantityController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
                       focusNode: _quantityFocus,
                       onFieldSubmitted: (_) {
                         FocusScope.of(context).requestFocus(_unitPriceFocus);
@@ -146,7 +136,7 @@ class _ProductPopupState extends State<ProductPopup> {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value.tr),
                           );
                         }).toList(),
                       )),
@@ -157,8 +147,7 @@ class _ProductPopupState extends State<ProductPopup> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.60,
                     child: TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'price_per_unity'.tr),
+                      decoration: InputDecoration(labelText: 'price'.tr),
                       textInputAction: TextInputAction.next,
                       controller: _unitPriceController,
                       inputFormatters: [

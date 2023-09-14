@@ -10,13 +10,14 @@ class ProductTableDB implements CrudInterface {
   create(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawInsert(
-        'INSERT INTO Product(name, quantity, unitPrice, trackListId, isInTheCart) VALUES(?, ?, ?, ?, ?)',
+        'INSERT INTO Product(name, quantity, price, trackListId, isInTheCart, unit) VALUES(?, ?, ?, ?, ?, ?)',
         [
           item.name,
           item.quantity,
-          item.unitPrice,
+          item.price,
           item.trackListId,
-          item.isInTheCart
+          item.isInTheCart,
+          item.unit
         ],
       );
     });
@@ -44,9 +45,10 @@ class ProductTableDB implements CrudInterface {
         id: maps[index]['id'],
         name: maps[index]['name'],
         quantity: maps[index]['quantity'],
-        unitPrice: maps[index]['unitPrice'],
+        price: maps[index]['price'],
         trackListId: maps[index]['trackListId'],
         isInTheCart: maps[index]['isInTheCart'],
+        unit: maps[index]['unit'],
       );
     });
   }
@@ -55,14 +57,15 @@ class ProductTableDB implements CrudInterface {
   update(Database database, item) async {
     int itemId = await database.transaction((txn) async {
       return txn.rawUpdate(
-        'UPDATE Product SET name = ?, quantity = ?, unitPrice = ?, trackListId = ?, isInTheCart = ? WHERE id = ?',
+        'UPDATE Product SET name = ?, quantity = ?, price = ?, trackListId = ?, isInTheCart = ?, unit =  ? WHERE id = ?',
         [
           item.name,
           item.quantity,
-          item.unitPrice,
+          item.price,
           item.trackListId,
           item.isInTheCart,
           item.id,
+          item.unit
         ],
       );
     });
@@ -83,9 +86,10 @@ class ProductTableDB implements CrudInterface {
         id: maps[index]['id'],
         name: maps[index]['name'],
         quantity: maps[index]['quantity'],
-        unitPrice: maps[index]['unitPrice'],
+        price: maps[index]['price'],
         trackListId: maps[index]['trackListId'],
         isInTheCart: maps[index]['isInTheCart'],
+        unit: maps[index]['unit'],
       );
     });
   }

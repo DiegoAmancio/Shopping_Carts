@@ -27,11 +27,12 @@ class ProductCard extends StatelessWidget {
   }
 
   String _formatMessage() {
-    final total = _formatCurrency(product.unitPrice * product.quantity);
-    final unitPrice = _formatCurrency(product.unitPrice);
+    final total = _formatCurrency(product.price * product.quantity);
+    final price = _formatCurrency(product.price);
     final productQuantity = _formatProductQuantity();
+    final productUnit = product.unit.tr;
     final totalLabel = 'total'.tr;
-    return '$productQuantity x $unitPrice $totalLabel: $total';
+    return '$productQuantity $productUnit x $price \n$totalLabel: $total';
   }
 
   String _formatCurrency(double amount) {
