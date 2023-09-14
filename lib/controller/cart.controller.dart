@@ -6,43 +6,47 @@ import '../db/database.dart';
 import '../db/list.dart';
 
 class CartController extends GetxController {
-  final RxList<ListTabItem> lists = <ListTabItem>[].obs;
-  final ListTableDB listTableDB = ListTableDB();
-  late Database database;
+  final RxList<ListTabItem> _lists = <ListTabItem>[].obs;
+  final ListTableDB _listTableDB = ListTableDB();
+  late Database _database;
+
+  List<ListTabItem> get lists {
+    return _lists;
+  }
 
   Future<void> initializeDatabase() async {
     final db = await AppDatabase().getDB();
-    database = db;
+    _database = db;
   }
 
   Future<void> addItem(ListTabItem item) async {
-    final itemId = await listTableDB.create(database, item);
+    final itemId = await _listTableDB.create(_database, item);
     item.id = itemId;
-    lists.add(item);
+    _lists.add(item);
   }
 
   Future<void> updateItem(ListTabItem item) async {
-    final itemId = await listTableDB.update(database, item);
+    final itemId = await _listTableDB.update(_database, item);
     item.id = itemId;
-    int index = lists.indexWhere((element) => element.id == item.id);
-    lists[index] = item;
+    int index = _lists.indexWhere((element) => element.id == item.id);
+    _lists[index] = item;
   }
 
   deleteItem(int id) async {
-    await listTableDB.delete(database, id);
-    int index = lists.indexWhere((element) => element.id == id);
-    lists.removeAt(index);
+    await _listTableDB.delete(_database, id);
+    int index = _lists.indexWhere((element) => element.id == id);
+    _lists.removeAt(index);
   }
 
   setLists(List<ListTabItem> newLists) {
-    lists.clear();
-    lists.addAll(newLists);
+    _lists.clear();
+    _lists.addAll(newLists);
   }
 
   initLists() async {
     await initializeDatabase();
 
-    final itens = await listTableDB.getAll(database, null);
+    final itens = await _listTableDB.getAll(_database, null);
     setLists(itens);
     return itens;
   }
