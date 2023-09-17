@@ -4,8 +4,8 @@ import 'package:shopping_list/controller/cart.controller.dart';
 import 'package:shopping_list/controller/product.controller.dart';
 
 import '../class/list_tab_item.dart';
-import '../atoms/list_form_popup.dart';
-import '../molecules/list_tab.dart';
+import '../components/atoms/list_form_popup.dart';
+import '../components/molecules/list_tab.dart';
 
 class HomeScreen extends StatelessWidget {
   final _cartController = Get.find<CartController>();

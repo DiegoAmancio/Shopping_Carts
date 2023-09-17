@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_list/class/product.dart';
 
-import '../atoms/list_nutshell.dart';
-import '../atoms/product.dart';
-import '../atoms/product_popup.dart';
+import '../components/atoms/list_nutshell.dart';
+import '../components/atoms/product.dart';
+import '../components/molecules/product_popup.dart';
 import '../class/list_tab_item.dart';
 import '../controller/product.controller.dart';
 
