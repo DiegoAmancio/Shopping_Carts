@@ -55,7 +55,7 @@ class ProductsController extends GetxController {
   calculateTotal() {
     return products.isNotEmpty
         ? products
-            .map((product) => product.quantity * product.unitPrice)
+            .map((product) => product.quantity * product.price)
             .reduce((sum, value) => sum + value)
         : 0.0;
   }
@@ -67,7 +67,7 @@ class ProductsController extends GetxController {
 
     return isInTheCartList.isNotEmpty
         ? isInTheCartList
-            .map((product) => product.quantity * product.unitPrice)
+            .map((product) => product.quantity * product.price)
             .reduce((sum, value) => sum + value)
         : 0.0;
   }

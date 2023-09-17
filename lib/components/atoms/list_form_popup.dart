@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../class/list_tab_item.dart';
+import '../../class/list_tab_item.dart';
 
 class ListFormPopup extends StatefulWidget {
   final ListTabItem initItem;

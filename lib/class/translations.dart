@@ -12,10 +12,16 @@ class AppTranslations extends Translations {
           'out_of_cart': 'Out of cart',
           'product_name': 'Product name',
           'quantity': 'Quantity',
-          'price_per_unity': 'Price per unity',
+          'price': 'Price',
           'edit': 'Edit',
           'remove': 'Remove',
-          'insert_to_cart': 'Insert to cart'
+          'insert_to_cart': 'Insert to cart',
+          'unit': 'Unity',
+          'ml': 'ML',
+          'kg': 'KG',
+          'g': 'G',
+          'caixa': 'Box',
+          'package': 'Package'
         },
         'pt_BR': {
           'total': 'Total',
@@ -26,11 +32,17 @@ class AppTranslations extends Translations {
           'out_of_cart': 'Fora do carrinho',
           'product_name': 'Nome do produto',
           'quantity': 'Quantidade',
-          'price_per_unity': 'Preço por unidade',
+          'price': 'Preço',
           'edit': 'Editar',
           'remove': 'Remover',
           'insert_to_cart': 'Inserir no carrinho',
           'save': 'Salvar',
+          'unit': 'Unidade',
+          'ml': 'ML',
+          'kg': 'KG',
+          'g': 'G',
+          'caixa': 'Caixa',
+          'package': 'Embalagem'
         }
       };
 }

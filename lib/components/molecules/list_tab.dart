@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../atoms/popup_card_menu.dart';
-import '../class/list_tab_item.dart';
+import '../../class/list_tab_item.dart';
 
 class ListTab extends StatelessWidget {
   final ListTabItem item;

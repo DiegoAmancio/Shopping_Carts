@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shopping_list/class/product.dart';
 
-import '../atoms/list_nutshell.dart';
-import '../atoms/product.dart';
-import '../atoms/product_popup.dart';
+import '../components/atoms/list_nutshell.dart';
+import '../components/atoms/product.dart';
+import '../components/molecules/product_popup.dart';
 import '../class/list_tab_item.dart';
 import '../controller/product.controller.dart';
 
@@ -34,9 +34,10 @@ class CartScreen extends StatelessWidget {
               id: 0,
               name: '',
               quantity: 1,
-              unitPrice: 0,
+              price: 0,
               trackListId: _controller.cartId,
-              isInTheCart: 0),
+              isInTheCart: 0,
+              unit: 'unit'),
           onSubmit: (Product product) => _addItem(context, product),
         );
       },
