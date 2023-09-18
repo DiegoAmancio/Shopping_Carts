@@ -31,7 +31,10 @@ class ListNutshell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(
-        color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    );
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       color: Theme.of(context).primaryColor,
@@ -48,9 +51,13 @@ class ListNutshell extends StatelessWidget {
                   color: Colors.white,
                   size: 40,
                 ),
-                title: Text(
-                  'in_the_cart'.tr,
-                  style: textStyle,
+                title: FittedBox(
+                  alignment: Alignment.bottomLeft,
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'in_the_cart'.tr,
+                    style: textStyle,
+                  ),
                 ),
                 subtitle: Text(
                   totalInTheCart,
@@ -66,9 +73,13 @@ class ListNutshell extends StatelessWidget {
                   size: 40,
                   Icons.calculate,
                 ),
-                title: Text(
-                  'total'.tr,
-                  style: textStyle,
+                title: FittedBox(
+                  alignment: Alignment.bottomLeft,
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'total'.tr,
+                    style: textStyle,
+                  ),
                 ),
                 subtitle: Text(
                   total,
