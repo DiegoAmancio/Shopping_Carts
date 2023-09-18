@@ -61,7 +61,6 @@ class _ListFormPopupState extends State<ListFormPopup> {
                 decoration: InputDecoration(labelText: 'name_of_list'.tr),
                 textInputAction: TextInputAction.next,
                 controller: _titleController,
-                autofocus: true,
                 onFieldSubmitted: (_) {
                   _submitForm();
                 },

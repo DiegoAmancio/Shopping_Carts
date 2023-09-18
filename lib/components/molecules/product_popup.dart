@@ -29,7 +29,15 @@ class _ProductPopupState extends State<ProductPopup> {
   final _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
 
-  final List<String> _unitOptions = ['unit', 'ml', 'kg', 'g', 'box', 'package'];
+  final List<String> _unitOptions = [
+    'unit',
+    'l',
+    'ml',
+    'kg',
+    'g',
+    'box',
+    'package'
+  ];
   String _unitValue = 'unit';
 
   final _quantityFocus = FocusNode();
@@ -104,7 +112,6 @@ class _ProductPopupState extends State<ProductPopup> {
       ),
       child: SizedBox(
         height: 300,
-        width: double.infinity,
         child: Form(
           key: _formKey,
           child: ListView(
@@ -118,7 +125,6 @@ class _ProductPopupState extends State<ProductPopup> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_quantityFocus);
                 },
-                autofocus: true,
               ),
               QuantityUnitRow(
                 initialUnitValue: _unitValue,

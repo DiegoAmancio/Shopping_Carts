@@ -26,7 +26,7 @@ class QuantityUnitRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.60,
+          width: MediaQuery.of(context).size.width * 0.50,
           child: TextFormField(
             decoration: InputDecoration(labelText: 'quantity'.tr),
             textInputAction: TextInputAction.next,
@@ -39,7 +39,7 @@ class QuantityUnitRow extends StatelessWidget {
           ),
         ),
         SizedBox(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.40,
             child: DropdownButtonFormField<String>(
               value: initialUnitValue,
               onChanged: (String? newValue) {
@@ -48,7 +48,7 @@ class QuantityUnitRow extends StatelessWidget {
               items: unitOptions.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value.tr),
+                  child: SizedBox(width: 120, child: Text(value.tr)),
                 );
               }).toList(),
             )),

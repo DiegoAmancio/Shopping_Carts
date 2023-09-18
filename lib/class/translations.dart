@@ -17,10 +17,11 @@ class AppTranslations extends Translations {
           'remove': 'Remove',
           'insert_to_cart': 'Insert to cart',
           'unit': 'Unity',
-          'ml': 'ML',
-          'kg': 'KG',
-          'g': 'G',
-          'caixa': 'Box',
+          'l': 'Liters (L)',
+          'ml': 'Milliliters (ML)',
+          'kg': 'Kilograms (KG)',
+          'g': 'Grama (G)',
+          'box': 'Box',
           'package': 'Package'
         },
         'pt_BR': {
@@ -38,10 +39,11 @@ class AppTranslations extends Translations {
           'insert_to_cart': 'Inserir no carrinho',
           'save': 'Salvar',
           'unit': 'Unidade',
-          'ml': 'ML',
-          'kg': 'KG',
-          'g': 'G',
-          'caixa': 'Caixa',
+          'l': 'Litros (L)',
+          'ml': 'Mililitros (mL)',
+          'kg': 'Kiligramas (KG)',
+          'g': 'Gramas (G)',
+          'box': 'Caixa',
           'package': 'Embalagem'
         }
       };
