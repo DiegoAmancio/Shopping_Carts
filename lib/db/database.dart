@@ -13,7 +13,7 @@ class AppDatabase {
       await db.execute(
           'CREATE TABLE ListTable (id INTEGER PRIMARY KEY, name TEXT, value INTEGER, date DATETIME)');
       await db.execute(
-          'CREATE TABLE Product (id INTEGER PRIMARY KEY, name TEXT, unit TEXT, quantity INTEGER, price REAL, isInTheCart INTEGER CHECK(isInTheCart IN (0, 1)), trackListId INTEGER, FOREIGN KEY(trackListId) REFERENCES ListTable(id) ON DELETE CASCADE)');
+          'CREATE TABLE Product (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, price REAL, isInTheCart INTEGER CHECK(isInTheCart IN (0, 1)),  unit TEXT, trackListId INTEGER, FOREIGN KEY(trackListId) REFERENCES ListTable(id) ON DELETE CASCADE)');
     });
 
     // databaseFactory.deleteDatabase(path);

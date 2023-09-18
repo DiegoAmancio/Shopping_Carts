@@ -24,7 +24,7 @@ class PriceRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.60,
+          width: MediaQuery.of(context).size.width * 0.50,
           child: TextFormField(
             decoration: InputDecoration(labelText: 'price'.tr),
             textInputAction: TextInputAction.next,
@@ -42,7 +42,7 @@ class PriceRow extends StatelessWidget {
             top: 10,
           ),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.40,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
